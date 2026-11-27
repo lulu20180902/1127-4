@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="中级会计备考">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#C084FC">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="中级会计备考">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<title>中级会计备考工作台 · 2027考季</title>
+<style>
+:root{
+  --pink:#F9A8D4; --mint:#6EE7B7; --lav:#C4B5FD; --cream:#FDE68A; --sky:#BAE6FD;
+  --card:#FFFFFF; --line:#F0E6F2;
+  --ink:#4A3B4C; --ink2:#7E6E80; --ink3:#AB9DAE;
+  --brand:#A855F7; --brand-d:#8B5CF6; --brand-l:#F5E8FF;
+  --sw:#E879A6; --cg:#38BFA8; --jf:#D4A72C;
+  --r:18px; --rs:12px;
+  --sh:0 6px 22px rgba(168,120,190,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif;
+  background:linear-gradient(135deg,#FDF2F8 0%,#F5F3FF 34%,#F0FDFA 68%,#FFFBEB 100%);
+  background-attachment:fixed;color:var(--ink);font-size:13.5px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+.shell{display:flex;min-height:100vh}
+
+/* ===== 侧栏：磨砂玻璃 ===== */
+.rail{width:240px;flex-shrink:0;background:rgba(255,255,255,.72);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);border-right:1px solid rgba(255,255,255,.8);
+  padding:24px 14px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:11px;padding:0 6px 20px;border-bottom:1px solid var(--line)}
+.brand-logo{width:40px;height:40px;border-radius:13px;
+  background:linear-gradient(135deg,#FBCFE8,#C4B5FD,#A7F3D0);color:#7C3AED;
+  display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;flex-shrink:0}
+.brand-txt b{display:block;font-size:14px;letter-spacing:.3px;font-weight:650}
+.brand-txt span{display:block;font-size:11px;color:var(--ink3);margin-top:2px}
+.side-label{font-size:10.5px;color:var(--ink3);letter-spacing:1.2px;padding:20px 8px 8px}
+.nav{display:flex;flex-direction:column;gap:5px}
+.nav button{display:flex;align-items:center;gap:10px;width:100%;border:none;background:transparent;
+  border-radius:var(--rs);padding:10px 11px;text-align:left;font-family:inherit;cursor:pointer;
+  position:relative;color:var(--ink2);transition:background .15s}
+.nav button:hover{background:rgba(255,255,255,.85)}
+.nav button.on{background:linear-gradient(100deg,#F5E8FF,#FDF2F8)}
+.nav button.on::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;
+  border-radius:2px;background:linear-gradient(#C084FC,#F9A8D4)}
+.nav .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.nav-txt b{display:block;font-size:13.5px;font-weight:650;color:var(--ink)}
+.nav-txt small{display:block;font-size:10.5px;color:var(--ink3);margin-top:1px}
+.nav button.on .nav-txt b{color:var(--brand-d)}
+.side-foot{margin-top:auto;padding:15px 10px 2px;border-top:1px solid var(--line)}
+.side-k{font-size:11px;color:var(--ink3)}
+.side-v{font-size:28px;font-weight:700;
+  background:linear-gradient(100deg,#A855F7,#EC4899);-webkit-background-clip:text;
+  background-clip:text;color:transparent;line-height:1.3;margin:2px 0;font-variant-numeric:tabular-nums}
+.side-v small{font-size:12px;font-weight:400;color:var(--ink2);margin-left:3px;-webkit-text-fill-color:var(--ink2)}
+.side-k2{font-size:11px;color:var(--ink3);margin-top:7px;line-height:1.6}
+
+/* ===== 主区 ===== */
+.main{flex:1;min-width:0;padding:0 30px 52px;max-width:1260px;margin:0 auto;width:100%}
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  padding:26px 0 18px;border-bottom:1px solid rgba(255,255,255,.9);margin-bottom:18px}
+.crumb{font-size:11.5px;color:var(--ink3);letter-spacing:.4px;margin-bottom:6px}
+.topbar h1{font-size:26px;font-weight:700;letter-spacing:.5px;line-height:1.25;
+  background:linear-gradient(100deg,#8B5CF6,#EC4899);-webkit-background-clip:text;background-clip:text;color:transparent}
+.topbar .sub{font-size:12.5px;color:var(--ink2);margin-top:6px}
+.topbar .date{font-size:12.5px;color:var(--ink2);white-space:nowrap;background:rgba(255,255,255,.85);
+  border:1px solid var(--line);border-radius:20px;padding:6px 14px}
+.view{display:none}
+.view.on{display:block}
+
+/* ===== 顶部横幅：马卡龙渐变 ===== */
+.alarm{display:grid;grid-template-columns:150px 1fr;
+  grid-template-areas:"cd quote" "cd sup" "cd ops" "cd dots" "cd dims";
+  gap:0 20px;align-items:center;background:linear-gradient(112deg,#FCE7F3 0%,#EDE9FE 48%,#D1FAE5 100%);
+  border:1px solid rgba(255,255,255,.9);border-radius:var(--r);padding:18px 22px;
+  margin-bottom:18px;box-shadow:var(--sh)}
+.alarm .cd{grid-area:cd;display:flex;align-items:baseline;gap:6px;
+  border-right:1px solid rgba(120,80,140,.14);padding-right:18px}
+.alarm .cd .n{font-size:46px;font-weight:700;letter-spacing:-2px;line-height:1;
+  background:linear-gradient(100deg,#A855F7,#EC4899);-webkit-background-clip:text;background-clip:text;color:transparent;
+  font-variant-numeric:tabular-nums}
+.alarm .cd .u{font-size:12px;color:#9B7AA8}
+.alarm .cd .t{display:none}
+.alarm .quote{grid-area:quote;font-size:15px;font-weight:600;line-height:1.6;color:#5B3A6B}
+.alarm .quote .mk{color:#C084FC;font-size:17px;font-weight:700}
+.alarm .sup{grid-area:sup;font-size:11.5px;color:#8B6B98;margin-top:5px;line-height:1.7}
+.alarm .ops{grid-area:ops;display:flex;gap:8px;margin-top:10px}
+.alarm .ops button{flex:0 0 auto;border:1px solid rgba(160,110,180,.2);
+  background:rgba(255,255,255,.65);color:#6D4A7B;border-radius:8px;padding:6px 12px;
+  font-family:inherit;font-size:11.5px;cursor:pointer;transition:.15s}
+.alarm .ops button:hover{background:#fff}
+.alarm .ops button:first-child{background:linear-gradient(100deg,#C084FC,#F0ABFC);border-color:transparent;color:#fff}
+.alarm .dotl{grid-area:dots;display:flex;gap:5px;margin-top:11px}
+.alarm .dotl i{height:3px;width:18px;border-radius:2px;background:rgba(160,110,180,.2)}
+.alarm .dotl i.on{background:#C084FC}
+
+/* ===== 两列网格 ===== */
+.grid{display:grid;grid-template-columns:1.42fr 1fr;gap:16px;align-items:start}
+.col-a,.col-b{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.95);border-radius:var(--r);
+  padding:18px 20px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--pink),var(--lav),var(--mint))}
+.card h2{font-size:14px;font-weight:650;display:flex;align-items:center;gap:8px;
+  margin-bottom:14px;color:var(--ink)}
+.card h2 .r{margin-left:auto;font-size:11.5px;font-weight:400;color:var(--ink3)}
+
+/* ===== 今日概览 ===== */
+.hero{background:linear-gradient(120deg,#FDF2F8,#F5E8FF 50%,#F0FDFA);border:1px solid #F3E8FA;
+  border-radius:var(--r);padding:18px 20px;box-shadow:var(--sh)}
+.hero .top{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#8B5CF6}
+.hero .tag{background:#fff;border:1px solid #E9D5FF;padding:2px 9px;border-radius:20px;font-size:11px}
+.hero .big{font-size:18px;font-weight:700;line-height:1.5;margin:12px 0 6px;color:var(--ink)}
+.hero .small{font-size:12.5px;color:var(--ink2);line-height:1.7}
+.hero .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;padding-top:12px;
+  border-top:1px solid #F0E4FA;font-size:11.5px;color:var(--ink2)}
+
+/* ===== 任务项 ===== */
+.subj{border:1px solid var(--line);border-left:3px solid #ccc;border-radius:var(--rs);
+  background:linear-gradient(180deg,#fff,#FDFBFF);padding:12px 14px;margin-bottom:10px}
+.subj:last-child{margin-bottom:0}
+.subj .h{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.subj .nm{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:5px;color:#fff}
+.subj .rd{font-size:11px;color:var(--ink3)}
+.subj .ch{font-size:14px;font-weight:650;line-height:1.45}
+.subj .un{font-size:12.5px;color:var(--ink2);margin-top:4px;line-height:1.65}
+.subj .ft{display:flex;align-items:center;gap:8px;margin-top:9px;font-size:11.5px;color:var(--ink3)}
+.ck{margin-left:auto;width:26px;height:26px;border-radius:50%;border:1.5px solid #E4D8EA;
+  background:#fff;display:flex;align-items:center;justify-content:center;color:#fff;
+  font-size:13px;cursor:pointer;transition:.15s;flex-shrink:0}
+.ck:hover{transform:scale(1.07)}
+.ck.on{background:linear-gradient(135deg,#A78BFA,#F472B6);border-color:transparent}
+
+/* ===== 进度条 ===== */
+.row{display:flex;align-items:center;gap:10px;margin:11px 0}
+.row .nm{width:52px;font-size:12px;font-weight:600;flex-shrink:0}
+.row .bar{flex:1;height:8px;background:#F3EDF7;border-radius:6px;overflow:hidden}
+.row .bar i{display:block;height:100%;border-radius:6px;transition:width .4s}
+.row .pc{width:36px;text-align:right;font-size:11.5px;color:var(--ink3);font-variant-numeric:tabular-nums}
+
+/* ===== 时间轴 ===== */
+.tl{position:relative;padding-left:16px}
+.tl::before{content:"";position:absolute;left:4px;top:8px;bottom:8px;width:2px;background:#F0E4FA}
+.tl .it{position:relative;padding:7px 0}
+.tl .it::before{content:"";position:absolute;left:-16px;top:14px;width:8px;height:8px;
+  border-radius:50%;background:#fff;border:2px solid #C084FC}
+.tl .it .dt{font-size:11px;color:var(--ink3)}
+.tl .it .tx{font-size:12.5px;line-height:1.55;margin-top:2px;color:var(--ink)}
+
+/* ===== 打卡 ===== */
+.week{display:flex;gap:6px;margin:4px 0 14px}
+.week .d1{flex:1;text-align:center;font-size:10.5px;color:var(--ink3)}
+.week .d1 b{display:flex;width:100%;aspect-ratio:1;max-height:38px;border-radius:9px;
+  background:#F6F0F9;margin-bottom:5px;align-items:center;justify-content:center;
+  font-size:11.5px;color:var(--ink3);font-weight:600}
+.week .d1.hit b{background:linear-gradient(135deg,#C4B5FD,#F9A8D4);color:#fff}
+.week .d1.td b{outline:2px solid #A855F7;outline-offset:1px}
+.bigbtn{width:100%;border:none;border-radius:var(--rs);padding:11px;
+  background:linear-gradient(100deg,#C084FC,#F0ABFC);color:#fff;
+  font-size:13.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:.15s}
+.bigbtn:hover{filter:brightness(1.05)}
+.startline{font-size:11px;color:var(--ink3);margin-top:10px;line-height:1.6}
+.li{font-size:12.5px;line-height:2;color:var(--ink2)}
+.li b{color:var(--ink);font-weight:650}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(8px);
+  background:linear-gradient(100deg,#8B5CF6,#EC4899);color:#fff;font-size:12.5px;padding:10px 20px;
+  border-radius:22px;opacity:0;transition:.25s;z-index:99;pointer-events:none;box-shadow:0 8px 24px rgba(139,92,246,.25)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== 新增功能模块 ===== */
+.dims{grid-area:dims;display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.dims span{font-size:11px;color:#7C5A8A}
+.dims b{font-size:13px;color:#7C3AED;margin-right:3px}
+.slider-row{display:flex;align-items:center;gap:12px}
+.slider-row input[type=range]{flex:1;accent-color:#C084FC;height:5px}
+.slider-val{font-size:18px;font-weight:700;color:#8B5CF6;min-width:56px;text-align:right}
+.pomo{display:flex;flex-direction:column;align-items:center;gap:9px;padding:4px 0}
+.pomo .clock{font-size:40px;font-weight:700;color:#8B5CF6;font-variant-numeric:tabular-nums;line-height:1.1}
+.pomo .modes{display:flex;gap:6px}
+.pomo .modes button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:4px 10px;font-size:11px;cursor:pointer;color:var(--ink2);font-family:inherit}
+.pomo .modes button.on{background:linear-gradient(100deg,#C084FC,#F0ABFC);color:#fff;border-color:transparent}
+.pomo .ctrls{display:flex;gap:8px}
+.pomo .ctrls button{border:none;border-radius:8px;padding:7px 18px;font-size:12px;cursor:pointer;font-family:inherit}
+.pomo .go{background:linear-gradient(100deg,#C084FC,#F0ABFC);color:#fff}
+.pomo .rst{background:#F6F0F9;color:var(--ink2)}
+.heat{display:grid;grid-template-columns:repeat(12,1fr);gap:3px}
+.heat i{aspect-ratio:1;border-radius:3px;background:#F2ECF6;display:block}
+.heat i.l1{background:#FCE7F3}.heat i.l2{background:#E9D5FF}.heat i.l3{background:#C4B5FD}.heat i.l4{background:#A855F7}
+.heat-lg{display:flex;align-items:center;gap:5px;margin-top:8px;font-size:10px;color:var(--ink3);justify-content:flex-end}
+.heat-lg i{width:9px;height:9px;border-radius:2px;display:block}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:#FAF7FC;opacity:.42;font-size:11px;color:var(--ink2)}
+.badge.on{opacity:1;background:linear-gradient(120deg,#FDF2F8,#F5E8FF);border-color:#E9D5FF;color:var(--ink)}
+.badge .ic{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#FBCFE8,#C4B5FD);display:flex;align-items:center;justify-content:center;font-size:10px;color:#7C3AED;font-weight:700}
+.wrong-form{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.wrong-form input,.wrong-form select{border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-family:inherit;font-size:12px;background:#fff;color:var(--ink);width:100%}
+.wrong-form .row2{display:flex;gap:6px}
+.wrong-form button{border:none;border-radius:8px;background:linear-gradient(100deg,#C084FC,#F0ABFC);color:#fff;padding:7px;font-family:inherit;font-size:12px;cursor:pointer}
+.wrong-item{border:1px solid var(--line);border-left:3px solid #F9A8D4;border-radius:8px;padding:8px 10px;margin-bottom:7px;background:#fff;font-size:12px}
+.wrong-item .meta{color:var(--ink3);font-size:10.5px}
+.wrong-item .ops{display:flex;gap:6px;margin-top:6px}
+.wrong-item .ops button{border:1px solid var(--line);background:#fff;border-radius:6px;padding:3px 8px;font-size:10.5px;cursor:pointer;color:var(--ink2)}
+.wrong-item .ops button.done{background:#F0FDFA;color:#0F6E56;border-color:#A7F3D0}
+.stat4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat4 div{background:#FAF7FC;border-radius:10px;padding:8px 10px;text-align:center}
+.stat4 b{display:block;font-size:17px;color:#8B5CF6;font-variant-numeric:tabular-nums}
+.stat4 span{font-size:10px;color:var(--ink3)}
+.review-tip{font-size:11px;color:#DB2777;margin-bottom:6px}
+
+/* ===== iPhone 安全区 ===== */
+.rail{padding-top:max(24px, env(safe-area-inset-top))}
+.main{padding-left:max(30px, env(safe-area-inset-left));padding-right:max(30px, env(safe-area-inset-right))}
+@media(max-width:1000px){ .grid{grid-template-columns:1fr} }
+@media(max-width:760px){
+  .shell{display:block}
+  .rail{position:fixed;left:0;top:0;bottom:0;width:64px;height:100vh;z-index:50;
+    padding:calc(12px + env(safe-area-inset-top)) 6px calc(12px + env(safe-area-inset-bottom));
+    border-right:1px solid var(--line);border-bottom:none;
+    flex-direction:column;align-items:center;gap:0;overflow-y:auto;overflow-x:hidden}
+  .brand{padding:0 0 12px;border-bottom:1px solid var(--line);flex:0 0 auto;width:100%;justify-content:center}
+  .brand-logo{width:34px;height:34px;font-size:14px;border-radius:10px}
+  .brand-txt{display:none}
+  .side-label{display:none}
+  .nav{width:100%;flex:0 0 auto;margin-top:14px;gap:6px}
+  .nav button{width:100%;justify-content:center;flex-direction:column;gap:3px;padding:8px 2px;min-height:46px}
+  .nav .dot{width:11px;height:11px}
+  .nav-txt{display:none}
+  .nav button::after{font-size:10px;line-height:1.2;color:var(--ink2);white-space:nowrap}
+  .nav button[data-view]::after{content:"今日"}
+  .nav button[data-sub="实务"]::after{content:"实务"}
+  .nav button[data-sub="财管"]::after{content:"财管"}
+  .nav button[data-sub="经济法"]::after{content:"经济法"}
+  .nav button.on::after{color:var(--brand-d);font-weight:600}
+  .nav button.on::before{left:0;right:auto;top:10px;bottom:10px;width:3px;height:auto}
+  .side-foot{display:none}
+  .main{margin-left:64px;margin-right:0;width:auto;max-width:none;
+    padding:calc(env(safe-area-inset-top) + 4px) 14px calc(36px + env(safe-area-inset-bottom))}
+  .topbar{padding:14px 0 12px}
+  .topbar h1{font-size:20px}
+  .topbar .date{display:none}
+  .alarm{padding:14px;grid-template-columns:1fr;grid-template-areas:"cd" "quote" "sup" "ops" "dims" "dots";gap:6px}
+  .alarm .cd{border-right:none;border-bottom:1px solid rgba(120,80,140,.14);padding:0 0 10px}
+  .alarm .cd .n{font-size:38px}
+  .grid{gap:12px}
+  .col-a,.col-b{gap:12px}
+  .card{padding:14px}
+  .toast{bottom:calc(30px + env(safe-area-inset-bottom))}
+}
+
+/* ===== iPhone 安全区（PWA 全屏：灵动岛 / 底部指示条） ===== */
+.rail{padding-top:max(24px, env(safe-area-inset-top))}
+.main{padding-left:max(30px, env(safe-area-inset-left));padding-right:max(30px, env(safe-area-inset-right))}
+@media(max-width:760px){
+  .rail{padding-top:max(14px, env(safe-area-inset-top))}
+  .main{padding-bottom:calc(36px + env(safe-area-inset-bottom))}
+  .toast{bottom:calc(30px + env(safe-area-inset-bottom))}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="brand">
+      <div class="brand-logo">考</div>
+      <div class="brand-txt"><b>中级会计备考</b><span>2027 考季 · 四轮计划</span></div>
+    </div>
+    <div class="side-label">总览</div>
+    <nav class="nav">
+      <button class="on" data-view="today"><span class="dot" style="background:linear-gradient(135deg,#C084FC,#F472B6)"></span><span class="nav-txt"><b>今日查看</b><small>提醒 · 打卡 · 全局进度</small></span></button>
+    </nav>
+    <div class="side-label">科目</div>
+    <nav class="nav">
+      <button data-sub="实务"><span class="dot" style="background:#F9A8D4"></span><span class="nav-txt"><b>实务</b><small>中级会计实务</small></span></button>
+      <button data-sub="财管"><span class="dot" style="background:#6EE7B7"></span><span class="nav-txt"><b>财管</b><small>中级财务管理</small></span></button>
+      <button data-sub="经济法"><span class="dot" style="background:#FDE68A"></span><span class="nav-txt"><b>经济法</b><small>中级经济法</small></span></button>
+    </nav>
+    <div class="side-foot">
+      <div class="side-k">距 2027 中级会计考试</div>
+      <div class="side-v" id="sideDays">—</div>
+      <div class="side-k2">起步 11月27日 · 四轮计划<br>精讲①→精讲②→强化→冲刺</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <div class="crumb">2027 中级会计 · 四轮备考计划</div>
+        <h1 id="hTitle">今日查看</h1>
+        <div class="sub" id="hSub"></div>
+      </div>
+      <div class="date" id="hDate"></div>
+    </header>
+
+    <section class="view on" id="v-today">
+      <div class="alarm" id="alarmCard">
+        <div class="cd" id="cdWrap">
+          <span class="n" id="cdNum">—</span><span class="u">天</span>
+          <span class="t" id="cdText">距 2027 中级会计考试</span>
+        </div>
+        <div class="quote"><span class="mk">“</span><span id="alarmQuote">—</span><span class="mk">”</span></div>
+        <div class="sup" id="alarmSup"></div>
+        <div class="dims" id="dimsBar"></div>
+        <div class="ops">
+          <button id="alarmNext">换一句 · 醒醒</button>
+          <button id="alarmCopy">复制做壁纸</button>
+        </div>
+        <div class="dotl" id="alarmDots"></div>
+      </div>
+
+      <div class="grid">
+        <div class="col-a">
+          <div class="card">
+            <h2>⏱️ 今日时长 <span class="r">忙时调低 · 周末调高</span></h2>
+            <div class="slider-row">
+              <input type="range" id="budgetRange" min="1" max="5" step="0.5" value="3">
+              <span class="slider-val" id="budgetVal">3h</span>
+            </div>
+            <div class="startline" id="budgetHint"></div>
+          </div>
+
+          <div class="card">
+            <h2>🍅 番茄时钟 <span class="r" id="pomoTotal"></span></h2>
+            <div class="pomo">
+              <div class="clock" id="pomoClock">25:00</div>
+              <div class="modes">
+                <button data-min="25" class="on">25 分钟</button>
+                <button data-min="45">45 分钟</button>
+                <button data-min="15">15 分钟</button>
+              </div>
+              <div class="ctrls">
+                <button class="go" id="pomoGo">开始专注</button>
+                <button class="rst" id="pomoRst">重置</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>🔥 打卡 <span class="r" id="streakTxt"></span></h2>
+            <div class="week" id="weekBar"></div>
+            <button class="bigbtn" id="btnCheck">记一笔今日打卡 ✔</button>
+            <div class="startline" id="startLine"></div>
+          </div>
+
+          <div class="card">
+            <h2>📈 学习热力图 <span class="r" id="heatHint"></span></h2>
+            <div class="heat" id="heatGrid"></div>
+            <div class="heat-lg">少 <i style="background:#F2ECF6"></i><i style="background:#FCE7F3"></i><i style="background:#E9D5FF"></i><i style="background:#C4B5FD"></i><i style="background:#A855F7"></i> 多</div>
+          </div>
+
+          <div class="card">
+            <h2>🏅 成就徽章 <span class="r" id="badgeHint"></span></h2>
+            <div class="badges" id="badgeBox"></div>
+          </div>
+        </div>
+
+        <div class="col-b">
+          <div class="card">
+            <h2>🧭 四轮进度总览</h2>
+            <div id="roundStat"></div>
+          </div>
+
+          <div class="card">
+            <h2>🗂️ 三科完成度</h2>
+            <div id="allStat"></div>
+          </div>
+
+          <div class="card">
+            <h2>📕 错题本 <span class="r" id="wrongHint"></span></h2>
+            <div class="wrong-form">
+              <input id="wTitle" placeholder="错题/知识点，如：长投权益法调整">
+              <div class="row2">
+                <select id="wSub"><option>实务</option><option>财管</option><option>经济法</option></select>
+                <input id="wReason" placeholder="错因（可选）">
+              </div>
+              <button id="wAdd">加入错题本</button>
+            </div>
+            <div class="review-tip" id="reviewTip"></div>
+            <div id="wrongList"></div>
+          </div>
+
+          <div class="card">
+            <h2>📆 本周复盘 <span class="r" id="weekRange"></span></h2>
+            <div class="stat4" id="weekStat"></div>
+            <div class="li" id="weekSummary" style="margin-top:10px"></div>
+          </div>
+
+          <div class="card">
+            <h2>📅 本月提醒 <span class="r" id="monthTip"></span></h2>
+            <div id="monthList" style="font-size:12.5px;line-height:1.95;color:var(--ink2)"></div>
+          </div>
+
+          <div class="card">
+            <h2>⚠️ 四轮纪律</h2>
+            <div class="li">
+              1. <b>断一天不补课、不重排</b>：第二天直接做当天任务，日历不会为你归零。<br>
+              2. <b>精讲一遍不纠结</b>：听不懂的先标记跳过，二轮再回头补，别在一章上耗两天。<br>
+              3. <b>每科学完当天必须做题</b>，不做题等于没学；财管公式当天默写一遍。<br>
+              4. <b>强化轮做透题</b>：跨章综合题和错题回炉优先于刷新课。<br>
+              5. <b>冲刺轮按套卷走</b>：每周固定真题/模拟，考前只回看错题和背诵。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="v-subject">
+      <div class="grid">
+        <div class="col-a">
+          <div class="hero">
+            <div class="top"><span class="tag" id="heroStage">—</span><span id="heroCountdown"></span></div>
+            <div class="big" id="heroMain">加载中…</div>
+            <div class="small" id="heroSub"></div>
+            <div class="meta"><span id="heroH">建议 3h</span><span id="heroProg"></span><span id="heroWeek"></span></div>
+          </div>
+
+          <div class="card">
+            <h2>📚 <span id="subjTitle">实务</span> · 今日任务 <span class="r">勾选 = 已学完</span></h2>
+            <div id="todayList"></div>
+          </div>
+        </div>
+
+        <div class="col-b">
+          <div class="card">
+            <h2>📊 <span id="progTitle">实务</span> · 阶段完成度</h2>
+            <div id="subjStat"></div>
+          </div>
+
+          <div class="card">
+            <h2>🗓️ 未来安排 <span class="r" id="soonHint"></span></h2>
+            <div class="tl" id="soonList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ 课表数据 ============ */
+const DATA = [{"key": "r1s", "sub": "实务", "name": "① 精讲一遍", "start": "2026-11-27", "end": "2027-03-20", "units": [{"date": "2026-11-27", "d": "第13章 收入 · 精听", "u": "收入五步法①：识别合同、单项履约义务拆分", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-11-28", "d": "第13章 收入 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-11-29", "d": "第13章 收入 · 精听", "u": "收入五步法②：交易价格确定与分摊、时点/时段确认", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-11-30", "d": "第13章 收入 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-01", "d": "第13章 收入 · 精听", "u": "特定交易：销售退回、质保、主要责任人vs代理人", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-02", "d": "第13章 收入 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-03", "d": "第13章 收入 · 精听", "u": "可变对价、合同资产/合同负债、合同成本", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-04", "d": "第13章 收入 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-05", "d": "第13章 收入 · 精听", "u": "【阶段测】收入章节题30道+错题复盘", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-06", "d": "第13章 收入 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-07", "d": "第14章 政府补助 · 精听", "u": "与资产/收益相关的政府补助、总额法净额法", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-08", "d": "第14章 政府补助 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-09", "d": "第14章 政府补助 · 精听", "u": "政府补助退回、税务处理、章节题", "h": 1.5, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-10", "d": "第14章 政府补助 · 做题", "u": "", "h": 1.2, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-11", "d": "第15章 非货币性资产交换 · 精听", "u": "认定标准与非货币性资产范围", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-12", "d": "第15章 非货币性资产交换 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-13", "d": "第15章 非货币性资产交换 · 精听", "u": "公允价值/账面价值计量、换出损益、章节题", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-14", "d": "第15章 非货币性资产交换 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-15", "d": "第16章 债务重组 · 精听", "u": "以资产清偿、债转股、修改其他条款", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-16", "d": "第16章 债务重组 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-17", "d": "第16章 债务重组 · 精听", "u": "债权人/债务人双方处理+章节题", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-18", "d": "第16章 债务重组 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-19", "d": "第17章 所得税 · 精听", "u": "计税基础：资产（固资/无形/存货/投资性房地产）", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-20", "d": "第17章 所得税 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-21", "d": "第17章 所得税 · 精听", "u": "计税基础：负债、暂时性差异判定（应纳税/可抵扣）", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-22", "d": "第17章 所得税 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-23", "d": "第17章 所得税 · 精听", "u": "递延所得税资产/负债的确认与计量", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-24", "d": "第17章 所得税 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-25", "d": "第17章 所得税 · 精听", "u": "所得税费用计算、直接计入权益的所得税", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-26", "d": "第17章 所得税 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-27", "d": "第17章 所得税 · 精听", "u": "【阶段测】所得税综合题2道+错题", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-28", "d": "第17章 所得税 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-29", "d": "第18章 外币折算 · 精听", "u": "记账本位币、外币交易的初始与后续计量", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-30", "d": "第18章 外币折算 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-31", "d": "第18章 外币折算 · 精听", "u": "外币财务报表折算+章节题", "h": 1.5, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-01", "d": "第18章 外币折算 · 做题", "u": "", "h": 1.2, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-02", "d": "第19章 租赁 · 精听", "u": "租赁识别与分拆、承租人租赁负债与使用权资产初始计量", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-03", "d": "第19章 租赁 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-04", "d": "第19章 租赁 · 精听", "u": "承租人后续计量：折旧与利息、租赁变更", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-05", "d": "第19章 租赁 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-06", "d": "第19章 租赁 · 精听", "u": "短期/低价值租赁、出租人会计、售后租回", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-07", "d": "第19章 租赁 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-08", "d": "第19章 租赁 · 精听", "u": "【阶段测】租赁章节题25道", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-09", "d": "第19章 租赁 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-10", "d": "第20章 持有待售 · 精听", "u": "持有待售类别的划分、计量与列报", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-11", "d": "第20章 持有待售 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-12", "d": "第21章 合并报表 · 精听", "u": "合并范围与控制的判断（三要素）", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-13", "d": "第21章 合并报表 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-14", "d": "第21章 合并报表 · 精听", "u": "同一控制下企业合并的初始计量与合并日处理", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-15", "d": "第21章 合并报表 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-16", "d": "第21章 合并报表 · 精听", "u": "非同一控制：购买日、商誉初始确认、负商誉", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-17", "d": "第21章 合并报表 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-18", "d": "第21章 合并报表 · 精听", "u": "合并资产负债表①：子公司报表调整（权益调公允）", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-19", "d": "第21章 合并报表 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-20", "d": "第21章 合并报表 · 精听", "u": "合并资产负债表②：长投与所有者权益抵销", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-21", "d": "第21章 合并报表 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-22", "d": "第21章 合并报表 · 精听", "u": "合并资产负债表③：内部商品交易抵销（存货）", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-23", "d": "第21章 合并报表 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-24", "d": "第21章 合并报表 · 精听", "u": "合并资产负债表④：内部固定资产/债权债务抵销", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-25", "d": "第21章 合并报表 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-26", "d": "第21章 合并报表 · 精听", "u": "合并利润表、少数股东损益、合并现金流量表", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-27", "d": "第21章 合并报表 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-28", "d": "第21章 合并报表 · 精听", "u": "【阶段测】长投+合并综合题2套（不做完不许换章）", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-29", "d": "第21章 合并报表 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-30", "d": "第22章 政策/估计变更与差错更正 · 精听", "u": "三类区分、追溯调整法、未来适用法", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-31", "d": "第22章 政策/估计变更与差错更正 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-01", "d": "第22章 政策/估计变更与差错更正 · 精听", "u": "前期差错更正+章节题", "h": 1.5, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-02", "d": "第22章 政策/估计变更与差错更正 · 做题", "u": "", "h": 1.2, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-03", "d": "第23章 日后事项 · 精听", "u": "调整事项与非调整事项判断", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-04", "d": "第23章 日后事项 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-05", "d": "第23章 日后事项 · 精听", "u": "典型事项处理+章节题", "h": 1.5, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-06", "d": "第23章 日后事项 · 做题", "u": "", "h": 1.2, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-07", "d": "第24章 政府会计 · 精听", "u": "政府会计要素、双基础双报告、常见业务", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-08", "d": "第24章 政府会计 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-09", "d": "第25章 民间非营利组织 · 精听", "u": "净资产分类、收入费用、报表", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-10", "d": "第25章 民间非营利组织 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-11", "d": "三科串联 · 精听", "u": "实务一轮总复盘：画25章知识地图（1张A4）", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-12", "d": "三科串联 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-13", "d": "第1章 总论 · 精听", "u": "会计信息质量要求、计量属性（精讲二轮+题）", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-14", "d": "第1章 总论 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-15", "d": "第2章 存货 · 精听", "u": "初始计量、发出计价、跌价准备（精讲二轮+题）", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-16", "d": "第2章 存货 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-17", "d": "第3章 固定资产 · 精听", "u": "折旧方法、后续支出、处置（精讲二轮+题）", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-18", "d": "第3章 固定资产 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-19", "d": "第4章 无形资产 · 精听", "u": "研发资本化、摊销、处置（精讲二轮+题）", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-20", "d": "第4章 无形资产 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-21", "d": "第5章 投资性房地产 · 精听", "u": "两种模式与转换（精讲二轮+题）", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-22", "d": "第5章 投资性房地产 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-23", "d": "第6章 长期股权投资 · 精听", "u": "初始计量：同一/非同一/非合并", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-24", "d": "第6章 长期股权投资 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-25", "d": "第6章 长期股权投资 · 精听", "u": "权益法：损益调整、OCI、其他权益变动", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-26", "d": "第6章 长期股权投资 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-27", "d": "第6章 长期股权投资 · 精听", "u": "核算方法转换（成本↔权益、转金融资产）", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-28", "d": "第6章 长期股权投资 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-01", "d": "第6章 长期股权投资 · 精听", "u": "长投专项题20道（含转换）", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-02", "d": "第6章 长期股权投资 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-03", "d": "第7章 资产减值 · 精听", "u": "资产组、总部资产、商誉减值", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-04", "d": "第7章 资产减值 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-05", "d": "第8章 金融资产 · 精听", "u": "三分类、摊余成本与公允价值计量", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-06", "d": "第8章 金融资产 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-07", "d": "第8章 金融资产 · 精听", "u": "预期信用损失、重分类、金融负债+专项题", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-08", "d": "第8章 金融资产 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-09", "d": "第9章 职工薪酬 · 精听", "u": "短期薪酬、离职后福利、辞退福利", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-10", "d": "第9章 职工薪酬 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-11", "d": "第10章 股份支付 · 精听", "u": "权益/现金结算、等待期分摊", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-12", "d": "第10章 股份支付 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-13", "d": "第11章 借款费用 · 精听", "u": "资本化期间与资本化金额计算", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-14", "d": "第11章 借款费用 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-15", "d": "第12章 或有事项 · 精听", "u": "预计负债、亏损合同、重组义务+专项题", "h": 1.5, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-16", "d": "第12章 或有事项 · 做题", "u": "", "h": 1.2, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-17", "d": "第22—25章 补强 · 精听", "u": "政策变更/日后事项/政府会计/非营利（客观题为主）", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-18", "d": "第22—25章 补强 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-19", "d": "一轮章节回炉 · 精听", "u": "一轮第13—21章错题重做（错题驱动）", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-20", "d": "一轮章节回炉 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}], "color": ""}, {"key": "r1c", "sub": "财管", "name": "① 精讲一遍", "start": "2026-11-27", "end": "2027-03-02", "units": [{"date": "2026-11-27", "d": "第1章 总论 · 精听", "u": "企业组织形式、财务管理目标、利益冲突协调", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-11-28", "d": "第1章 总论 · 做题", "u": "", "h": 0.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-11-29", "d": "第2章 财务管理基础 · 精听", "u": "货币时间价值①：复利、普通年金、预付年金", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-11-30", "d": "第2章 财务管理基础 · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-01", "d": "第2章 财务管理基础 · 精听", "u": "货币时间价值②：递延年金、永续年金、插值法", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-02", "d": "第2章 财务管理基础 · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-03", "d": "第2章 财务管理基础 · 精听", "u": "风险与收益：单项资产、组合、资本资产定价模型", "h": 1.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-04", "d": "第2章 财务管理基础 · 做题", "u": "", "h": 0.8, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-05", "d": "第3章 预算管理 · 精听", "u": "预算体系、编制方法（固定/弹性/零基/滚动）", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-06", "d": "第3章 预算管理 · 做题", "u": "", "h": 0.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-07", "d": "第3章 预算管理 · 精听", "u": "业务预算与财务预算编制+章节题", "h": 1.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-08", "d": "第3章 预算管理 · 做题", "u": "", "h": 0.8, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-09", "d": "第4章 筹资管理（上） · 精听", "u": "股权筹资：吸收投资、股票发行、留存收益", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-10", "d": "第4章 筹资管理（上） · 做题", "u": "", "h": 0.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-11", "d": "第4章 筹资管理（上） · 精听", "u": "债务筹资：银行借款、债券、融资租赁、筹资实务创新", "h": 1.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-12", "d": "第4章 筹资管理（上） · 做题", "u": "", "h": 0.8, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-13", "d": "第5章 筹资管理（下） · 精听", "u": "资本成本①：个别资本成本（债务/股权）", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-14", "d": "第5章 筹资管理（下） · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-15", "d": "第5章 筹资管理（下） · 精听", "u": "资本成本②：加权平均WACC、边际资本成本", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-16", "d": "第5章 筹资管理（下） · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-17", "d": "第5章 筹资管理（下） · 精听", "u": "杠杆效应：经营杠杆DOL、财务杠杆DFL、总杠杆DTL", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-18", "d": "第5章 筹资管理（下） · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-19", "d": "第5章 筹资管理（下） · 精听", "u": "资本结构：MM理论、权衡理论、每股收益无差别点", "h": 1.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-20", "d": "第5章 筹资管理（下） · 做题", "u": "", "h": 0.8, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-21", "d": "第6章 投资管理 · 精听", "u": "投资管理概述、增量现金流量的估计", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-22", "d": "第6章 投资管理 · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-23", "d": "第6章 投资管理 · 精听", "u": "评价指标①：NPV、现值指数、内含报酬率IRR", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-24", "d": "第6章 投资管理 · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-25", "d": "第6章 投资管理 · 精听", "u": "评价指标②：回收期、年金净流量、互斥项目决策", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-26", "d": "第6章 投资管理 · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-27", "d": "第6章 投资管理 · 精听", "u": "固定资产更新决策、证券投资管理+章节题", "h": 1.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-28", "d": "第6章 投资管理 · 做题", "u": "", "h": 0.8, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-29", "d": "第7章 营运资金管理 · 精听", "u": "营运资金策略、现金管理（存货模型、随机模型）", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-30", "d": "第7章 营运资金管理 · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-31", "d": "第7章 营运资金管理 · 精听", "u": "应收账款信用政策决策、存货EOQ与保险储备", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-01", "d": "第7章 营运资金管理 · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-02", "d": "第7章 营运资金管理 · 精听", "u": "流动负债管理+章节题", "h": 0.8, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-03", "d": "第7章 营运资金管理 · 做题", "u": "", "h": 0.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-04", "d": "第8章 成本管理 · 精听", "u": "量本利分析：保本点、安全边际、敏感性分析", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-05", "d": "第8章 成本管理 · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-06", "d": "第8章 成本管理 · 精听", "u": "标准成本与三大差异分析（材料/人工/制造费用）", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-07", "d": "第8章 成本管理 · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-08", "d": "第8章 成本管理 · 精听", "u": "作业成本法、责任中心、内部转移价格+章节题", "h": 1.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-09", "d": "第8章 成本管理 · 做题", "u": "", "h": 0.8, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-10", "d": "第9章 收入与分配 · 精听", "u": "销售预测、定价方法、股利政策与分配形式", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-11", "d": "第9章 收入与分配 · 做题", "u": "", "h": 0.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-12", "d": "第10章 财务分析 · 精听", "u": "偿债/营运/盈利/发展能力指标+杜邦分析", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-13", "d": "第10章 财务分析 · 做题", "u": "", "h": 0.8, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-14", "d": "第10章 财务分析 · 精听", "u": "上市公司特殊指标、综合实例+章节题", "h": 1.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-15", "d": "第10章 财务分析 · 做题", "u": "", "h": 0.8, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-16", "d": "第1章 总论 · 精听", "u": "二轮精讲：目标与代理冲突", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-17", "d": "第1章 总论 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-18", "d": "第1章 总论 · 精听", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-19", "d": "第1章 总论 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-20", "d": "第2章 财务管理基础 · 精听", "u": "二轮精讲：时间价值+风险收益", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-21", "d": "第2章 财务管理基础 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-22", "d": "第2章 财务管理基础 · 精听", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-23", "d": "第2章 财务管理基础 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-24", "d": "第3章 预算管理 · 精听", "u": "二轮精讲：编制方法", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-25", "d": "第3章 预算管理 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-26", "d": "第3章 预算管理 · 精听", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-27", "d": "第3章 预算管理 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-28", "d": "第4章 筹资管理（上） · 精听", "u": "二轮精讲：股权与债务筹资", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-29", "d": "第4章 筹资管理（上） · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-30", "d": "第4章 筹资管理（上） · 精听", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-31", "d": "第4章 筹资管理（上） · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-01", "d": "第5章 筹资管理（下） · 精听", "u": "二轮精讲：资本成本与杠杆", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-02", "d": "第5章 筹资管理（下） · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-03", "d": "第5章 筹资管理（下） · 精听", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-04", "d": "第5章 筹资管理（下） · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-05", "d": "第6章 投资管理 · 精听", "u": "二轮精讲：NPV/IRR与更新决策", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-06", "d": "第6章 投资管理 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-07", "d": "第6章 投资管理 · 精听", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-08", "d": "第6章 投资管理 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-09", "d": "第7章 营运资金管理 · 精听", "u": "二轮精讲：现金/应收/存货", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-10", "d": "第7章 营运资金管理 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-11", "d": "第7章 营运资金管理 · 精听", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-12", "d": "第7章 营运资金管理 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-13", "d": "第8章 成本管理 · 精听", "u": "二轮精讲：量本利与差异分析", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-14", "d": "第8章 成本管理 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-15", "d": "第8章 成本管理 · 精听", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-16", "d": "第8章 成本管理 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-17", "d": "第9章 收入与分配 · 精听", "u": "二轮精讲：股利政策", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-18", "d": "第9章 收入与分配 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-19", "d": "第9章 收入与分配 · 精听", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-20", "d": "第9章 收入与分配 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-21", "d": "第10章 财务分析 · 精听", "u": "二轮精讲：杜邦体系", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-22", "d": "第10章 财务分析 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-23", "d": "第10章 财务分析 · 精听", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-24", "d": "第10章 财务分析 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-25", "d": "专项 · 精听", "u": "全科公式手册整理（一页纸）", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-26", "d": "专项 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-27", "d": "专项 · 精听", "u": "计算题提速训练：20题限时40分钟", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-28", "d": "专项 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-01", "d": "专项 · 精听", "u": "二轮错题总复盘", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-02", "d": "专项 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}], "color": ""}, {"key": "r1j", "sub": "经济法", "name": "① 精讲一遍", "start": "2026-12-20", "end": "2027-03-07", "units": [{"date": "2026-12-20", "d": "第2章 公司法 · 精听", "u": "公司设立、出资制度、股东权利与义务", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-21", "d": "第2章 公司法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-22", "d": "第2章 公司法 · 精听", "u": "组织机构、国家出资公司特别规定", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-23", "d": "第2章 公司法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-24", "d": "第2章 公司法 · 精听", "u": "股权转让、合并分立增减资、解散清算+客观题40", "h": 1.5, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-25", "d": "第2章 公司法 · 做题", "u": "", "h": 1.2, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-26", "d": "第3章 合伙企业法 · 精听", "u": "普通合伙：财产、事务执行、入伙退伙、责任", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-27", "d": "第3章 合伙企业法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-28", "d": "第3章 合伙企业法 · 精听", "u": "特殊普通合伙、有限合伙LP/GP+客观题40", "h": 1.5, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-29", "d": "第3章 合伙企业法 · 做题", "u": "", "h": 1.2, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-30", "d": "第1章 总论 · 精听", "u": "经济法概述、仲裁（含新规）、行政复议、诉讼", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2026-12-31", "d": "第1章 总论 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-01", "d": "第1章 总论 · 精听", "u": "行政复议与诉讼对比+客观题30", "h": 1.5, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-02", "d": "第1章 总论 · 做题", "u": "", "h": 1.2, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-03", "d": "第4章 物权法 · 精听", "u": "物权概述、变动规则、所有权（共有/善意取得）", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-04", "d": "第4章 物权法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-05", "d": "第4章 物权法 · 精听", "u": "担保物权①：抵押权设立与实现", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-06", "d": "第4章 物权法 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-07", "d": "第4章 物权法 · 精听", "u": "担保物权②：质权、留置权、并存规则+客观题40", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-08", "d": "第4章 物权法 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-09", "d": "第5章 合同法 · 精听", "u": "合同订立：要约与承诺、格式条款", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-10", "d": "第5章 合同法 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-11", "d": "第5章 合同法 · 精听", "u": "合同效力、履行、代位权与撤销权", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-12", "d": "第5章 合同法 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-13", "d": "第5章 合同法 · 精听", "u": "保证与定金、变更转让、违约责任", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-14", "d": "第5章 合同法 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-15", "d": "第5章 合同法 · 精听", "u": "典型合同①：买卖、赠与、借款、租赁", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-16", "d": "第5章 合同法 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-17", "d": "第5章 合同法 · 精听", "u": "典型合同②：承揽、建设工程、运输+客观题50", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-18", "d": "第5章 合同法 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-19", "d": "第6章 票据与证券法 · 精听", "u": "票据权利与行为、抗辩、汇票/本票/支票", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-20", "d": "第6章 票据与证券法 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-21", "d": "第6章 票据与证券法 · 精听", "u": "证券发行与交易、信息披露、上市公司收购", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-22", "d": "第6章 票据与证券法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-23", "d": "第6章 票据与证券法 · 精听", "u": "保险法律制度：保险合同、人身/财产保险", "h": 1.5, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-24", "d": "第6章 票据与证券法 · 做题", "u": "", "h": 1.2, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-25", "d": "第7章 财政法 · 精听", "u": "预算法律制度、政府采购程序、国有资产管理", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-26", "d": "第7章 财政法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-27", "d": "第7章 财政法 · 精听", "u": "章节客观题40+全书法条框架梳理", "h": 1.5, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-28", "d": "第7章 财政法 · 做题", "u": "", "h": 1.2, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-29", "d": "第2章 公司法 · 精听", "u": "二轮：组织形式与治理 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-30", "d": "第2章 公司法 · 做题", "u": "", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-01-31", "d": "第2章 公司法 · 精听", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-01", "d": "第2章 公司法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-02", "d": "第3章 合伙企业法 · 精听", "u": "二轮：责任承担对比 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-03", "d": "第3章 合伙企业法 · 做题", "u": "", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-04", "d": "第3章 合伙企业法 · 精听", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-05", "d": "第3章 合伙企业法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-06", "d": "第1章 总论 · 精听", "u": "二轮：仲裁/复议/诉讼 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-07", "d": "第1章 总论 · 做题", "u": "", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-08", "d": "第1章 总论 · 精听", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-09", "d": "第1章 总论 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-10", "d": "第4章 物权法 · 精听", "u": "二轮：担保物权 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-11", "d": "第4章 物权法 · 做题", "u": "", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-12", "d": "第4章 物权法 · 精听", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-13", "d": "第4章 物权法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-14", "d": "第5章 合同法 · 精听", "u": "二轮：合同效力与违约 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-15", "d": "第5章 合同法 · 做题", "u": "", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-16", "d": "第5章 合同法 · 精听", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-17", "d": "第5章 合同法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-18", "d": "第6章 票据与证券法 · 精听", "u": "二轮：票据权利 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-19", "d": "第6章 票据与证券法 · 做题", "u": "", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-20", "d": "第6章 票据与证券法 · 精听", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-21", "d": "第6章 票据与证券法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-22", "d": "第7章 财政法 · 精听", "u": "二轮：预算与采购 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-23", "d": "第7章 财政法 · 做题", "u": "", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-24", "d": "第7章 财政法 · 精听", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-25", "d": "第7章 财政法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-26", "d": "第8章 保险法 · 精听", "u": "二轮：保险合同 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-27", "d": "第8章 保险法 · 做题", "u": "", "h": 1.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-02-28", "d": "第8章 保险法 · 精听", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-01", "d": "第8章 保险法 · 做题", "u": "", "h": 1.2, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-02", "d": "专项 · 精听", "u": "全书易混点对照表（自建）", "h": 2.0, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-03", "d": "专项 · 做题", "u": "", "h": 1.6, "test": false, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-04", "d": "专项 · 精听", "u": "客观题限时训练100道", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-05", "d": "专项 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-06", "d": "专项 · 精听", "u": "简答题模板定稿（结论+法条+分析）", "h": 2.0, "test": true, "tag": "① 精讲一遍", "base": false}, {"date": "2027-03-07", "d": "专项 · 做题", "u": "", "h": 1.6, "test": true, "tag": "① 精讲一遍", "base": false}], "color": ""}, {"key": "r2s", "sub": "实务", "name": "② 精讲二遍", "start": "2027-03-21", "end": "2027-05-16", "units": [{"date": "2027-03-21", "d": "第13章 收入 · 二刷", "u": "收入五步法①：识别合同、单项履约义务拆分", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-22", "d": "第13章 收入 · 二刷", "u": "收入五步法②：交易价格确定与分摊、时点/时段确认", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-23", "d": "第13章 收入 · 二刷", "u": "特定交易：销售退回、质保、主要责任人vs代理人", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-24", "d": "第13章 收入 · 二刷", "u": "可变对价、合同资产/合同负债、合同成本", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-25", "d": "第13章 收入 · 二刷", "u": "【阶段测】收入章节题30道+错题复盘", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-26", "d": "第14章 政府补助 · 二刷", "u": "与资产/收益相关的政府补助、总额法净额法", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-27", "d": "第14章 政府补助 · 二刷", "u": "政府补助退回、税务处理、章节题", "h": 1.5, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-28", "d": "第15章 非货币性资产交换 · 二刷", "u": "认定标准与非货币性资产范围", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-29", "d": "第15章 非货币性资产交换 · 二刷", "u": "公允价值/账面价值计量、换出损益、章节题", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-30", "d": "第16章 债务重组 · 二刷", "u": "以资产清偿、债转股、修改其他条款", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-31", "d": "第16章 债务重组 · 二刷", "u": "债权人/债务人双方处理+章节题", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-01", "d": "第17章 所得税 · 二刷", "u": "计税基础：资产（固资/无形/存货/投资性房地产）", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-02", "d": "第17章 所得税 · 二刷", "u": "计税基础：负债、暂时性差异判定（应纳税/可抵扣）", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-03", "d": "第17章 所得税 · 二刷", "u": "递延所得税资产/负债的确认与计量", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-04", "d": "第17章 所得税 · 二刷", "u": "所得税费用计算、直接计入权益的所得税", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-05", "d": "第17章 所得税 · 二刷", "u": "【阶段测】所得税综合题2道+错题", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-06", "d": "第18章 外币折算 · 二刷", "u": "记账本位币、外币交易的初始与后续计量", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-07", "d": "第18章 外币折算 · 二刷", "u": "外币财务报表折算+章节题", "h": 1.5, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-08", "d": "第19章 租赁 · 二刷", "u": "租赁识别与分拆、承租人租赁负债与使用权资产初始计量", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-09", "d": "第19章 租赁 · 二刷", "u": "承租人后续计量：折旧与利息、租赁变更", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-10", "d": "第19章 租赁 · 二刷", "u": "短期/低价值租赁、出租人会计、售后租回", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-11", "d": "第19章 租赁 · 二刷", "u": "【阶段测】租赁章节题25道", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-12", "d": "第20章 持有待售 · 二刷", "u": "持有待售类别的划分、计量与列报", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-13", "d": "第21章 合并报表 · 二刷", "u": "合并范围与控制的判断（三要素）", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-14", "d": "第21章 合并报表 · 二刷", "u": "同一控制下企业合并的初始计量与合并日处理", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-15", "d": "第21章 合并报表 · 二刷", "u": "非同一控制：购买日、商誉初始确认、负商誉", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-16", "d": "第21章 合并报表 · 二刷", "u": "合并资产负债表①：子公司报表调整（权益调公允）", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-17", "d": "第21章 合并报表 · 二刷", "u": "合并资产负债表②：长投与所有者权益抵销", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-18", "d": "第21章 合并报表 · 二刷", "u": "合并资产负债表③：内部商品交易抵销（存货）", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-19", "d": "第21章 合并报表 · 二刷", "u": "合并资产负债表④：内部固定资产/债权债务抵销", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-20", "d": "第21章 合并报表 · 二刷", "u": "合并利润表、少数股东损益、合并现金流量表", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-21", "d": "第21章 合并报表 · 二刷", "u": "【阶段测】长投+合并综合题2套（不做完不许换章）", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-22", "d": "第22章 政策/估计变更与差错更正 · 二刷", "u": "三类区分、追溯调整法、未来适用法", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-23", "d": "第22章 政策/估计变更与差错更正 · 二刷", "u": "前期差错更正+章节题", "h": 1.5, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-24", "d": "第23章 日后事项 · 二刷", "u": "调整事项与非调整事项判断", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-25", "d": "第23章 日后事项 · 二刷", "u": "典型事项处理+章节题", "h": 1.5, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-26", "d": "第24章 政府会计 · 二刷", "u": "政府会计要素、双基础双报告、常见业务", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-27", "d": "第25章 民间非营利组织 · 二刷", "u": "净资产分类、收入费用、报表", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-28", "d": "三科串联 · 二刷", "u": "实务一轮总复盘：画25章知识地图（1张A4）", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-29", "d": "第1章 总论 · 二刷", "u": "会计信息质量要求、计量属性（精讲二轮+题）", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-30", "d": "第2章 存货 · 二刷", "u": "初始计量、发出计价、跌价准备（精讲二轮+题）", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-01", "d": "第3章 固定资产 · 二刷", "u": "折旧方法、后续支出、处置（精讲二轮+题）", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-02", "d": "第4章 无形资产 · 二刷", "u": "研发资本化、摊销、处置（精讲二轮+题）", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-03", "d": "第5章 投资性房地产 · 二刷", "u": "两种模式与转换（精讲二轮+题）", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-04", "d": "第6章 长期股权投资 · 二刷", "u": "初始计量：同一/非同一/非合并", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-05", "d": "第6章 长期股权投资 · 二刷", "u": "权益法：损益调整、OCI、其他权益变动", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-06", "d": "第6章 长期股权投资 · 二刷", "u": "核算方法转换（成本↔权益、转金融资产）", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-07", "d": "第6章 长期股权投资 · 二刷", "u": "长投专项题20道（含转换）", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-08", "d": "第7章 资产减值 · 二刷", "u": "资产组、总部资产、商誉减值", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-09", "d": "第8章 金融资产 · 二刷", "u": "三分类、摊余成本与公允价值计量", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-10", "d": "第8章 金融资产 · 二刷", "u": "预期信用损失、重分类、金融负债+专项题", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-11", "d": "第9章 职工薪酬 · 二刷", "u": "短期薪酬、离职后福利、辞退福利", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-12", "d": "第10章 股份支付 · 二刷", "u": "权益/现金结算、等待期分摊", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-13", "d": "第11章 借款费用 · 二刷", "u": "资本化期间与资本化金额计算", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-14", "d": "第12章 或有事项 · 二刷", "u": "预计负债、亏损合同、重组义务+专项题", "h": 1.5, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-15", "d": "第22—25章 补强 · 二刷", "u": "政策变更/日后事项/政府会计/非营利（客观题为主）", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-16", "d": "一轮章节回炉 · 二刷", "u": "一轮第13—21章错题重做（错题驱动）", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}], "color": ""}, {"key": "r2c", "sub": "财管", "name": "② 精讲二遍", "start": "2027-03-21", "end": "2027-05-07", "units": [{"date": "2027-03-21", "d": "第1章 总论 · 二刷", "u": "企业组织形式、财务管理目标、利益冲突协调", "h": 0.8, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-22", "d": "第2章 财务管理基础 · 二刷", "u": "货币时间价值①：复利、普通年金、预付年金", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-23", "d": "第2章 财务管理基础 · 二刷", "u": "货币时间价值②：递延年金、永续年金、插值法", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-24", "d": "第2章 财务管理基础 · 二刷", "u": "风险与收益：单项资产、组合、资本资产定价模型", "h": 1.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-25", "d": "第3章 预算管理 · 二刷", "u": "预算体系、编制方法（固定/弹性/零基/滚动）", "h": 0.8, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-26", "d": "第3章 预算管理 · 二刷", "u": "业务预算与财务预算编制+章节题", "h": 1.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-27", "d": "第4章 筹资管理（上） · 二刷", "u": "股权筹资：吸收投资、股票发行、留存收益", "h": 0.8, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-28", "d": "第4章 筹资管理（上） · 二刷", "u": "债务筹资：银行借款、债券、融资租赁、筹资实务创新", "h": 1.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-29", "d": "第5章 筹资管理（下） · 二刷", "u": "资本成本①：个别资本成本（债务/股权）", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-30", "d": "第5章 筹资管理（下） · 二刷", "u": "资本成本②：加权平均WACC、边际资本成本", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-31", "d": "第5章 筹资管理（下） · 二刷", "u": "杠杆效应：经营杠杆DOL、财务杠杆DFL、总杠杆DTL", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-01", "d": "第5章 筹资管理（下） · 二刷", "u": "资本结构：MM理论、权衡理论、每股收益无差别点", "h": 1.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-02", "d": "第6章 投资管理 · 二刷", "u": "投资管理概述、增量现金流量的估计", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-03", "d": "第6章 投资管理 · 二刷", "u": "评价指标①：NPV、现值指数、内含报酬率IRR", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-04", "d": "第6章 投资管理 · 二刷", "u": "评价指标②：回收期、年金净流量、互斥项目决策", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-05", "d": "第6章 投资管理 · 二刷", "u": "固定资产更新决策、证券投资管理+章节题", "h": 1.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-06", "d": "第7章 营运资金管理 · 二刷", "u": "营运资金策略、现金管理（存货模型、随机模型）", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-07", "d": "第7章 营运资金管理 · 二刷", "u": "应收账款信用政策决策、存货EOQ与保险储备", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-08", "d": "第7章 营运资金管理 · 二刷", "u": "流动负债管理+章节题", "h": 0.8, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-09", "d": "第8章 成本管理 · 二刷", "u": "量本利分析：保本点、安全边际、敏感性分析", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-10", "d": "第8章 成本管理 · 二刷", "u": "标准成本与三大差异分析（材料/人工/制造费用）", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-11", "d": "第8章 成本管理 · 二刷", "u": "作业成本法、责任中心、内部转移价格+章节题", "h": 1.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-12", "d": "第9章 收入与分配 · 二刷", "u": "销售预测、定价方法、股利政策与分配形式", "h": 0.8, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-13", "d": "第10章 财务分析 · 二刷", "u": "偿债/营运/盈利/发展能力指标+杜邦分析", "h": 1.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-14", "d": "第10章 财务分析 · 二刷", "u": "上市公司特殊指标、综合实例+章节题", "h": 1.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-15", "d": "第1章 总论 · 二刷", "u": "二轮精讲：目标与代理冲突", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-16", "d": "第1章 总论 · 二刷", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-17", "d": "第2章 财务管理基础 · 二刷", "u": "二轮精讲：时间价值+风险收益", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-18", "d": "第2章 财务管理基础 · 二刷", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-19", "d": "第3章 预算管理 · 二刷", "u": "二轮精讲：编制方法", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-20", "d": "第3章 预算管理 · 二刷", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-21", "d": "第4章 筹资管理（上） · 二刷", "u": "二轮精讲：股权与债务筹资", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-22", "d": "第4章 筹资管理（上） · 二刷", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-23", "d": "第5章 筹资管理（下） · 二刷", "u": "二轮精讲：资本成本与杠杆", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-24", "d": "第5章 筹资管理（下） · 二刷", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-25", "d": "第6章 投资管理 · 二刷", "u": "二轮精讲：NPV/IRR与更新决策", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-26", "d": "第6章 投资管理 · 二刷", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-27", "d": "第7章 营运资金管理 · 二刷", "u": "二轮精讲：现金/应收/存货", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-28", "d": "第7章 营运资金管理 · 二刷", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-29", "d": "第8章 成本管理 · 二刷", "u": "二轮精讲：量本利与差异分析", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-30", "d": "第8章 成本管理 · 二刷", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-01", "d": "第9章 收入与分配 · 二刷", "u": "二轮精讲：股利政策", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-02", "d": "第9章 收入与分配 · 二刷", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-03", "d": "第10章 财务分析 · 二刷", "u": "二轮精讲：杜邦体系", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-04", "d": "第10章 财务分析 · 二刷", "u": "二轮：公式默写+配套题20道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-05", "d": "专项 · 二刷", "u": "全科公式手册整理（一页纸）", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-06", "d": "专项 · 二刷", "u": "计算题提速训练：20题限时40分钟", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-05-07", "d": "专项 · 二刷", "u": "二轮错题总复盘", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}], "color": ""}, {"key": "r2j", "sub": "经济法", "name": "② 精讲二遍", "start": "2027-03-21", "end": "2027-04-28", "units": [{"date": "2027-03-21", "d": "第2章 公司法 · 二刷", "u": "公司设立、出资制度、股东权利与义务", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-22", "d": "第2章 公司法 · 二刷", "u": "组织机构、国家出资公司特别规定", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-23", "d": "第2章 公司法 · 二刷", "u": "股权转让、合并分立增减资、解散清算+客观题40", "h": 1.5, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-24", "d": "第3章 合伙企业法 · 二刷", "u": "普通合伙：财产、事务执行、入伙退伙、责任", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-25", "d": "第3章 合伙企业法 · 二刷", "u": "特殊普通合伙、有限合伙LP/GP+客观题40", "h": 1.5, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-26", "d": "第1章 总论 · 二刷", "u": "经济法概述、仲裁（含新规）、行政复议、诉讼", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-27", "d": "第1章 总论 · 二刷", "u": "行政复议与诉讼对比+客观题30", "h": 1.5, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-28", "d": "第4章 物权法 · 二刷", "u": "物权概述、变动规则、所有权（共有/善意取得）", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-29", "d": "第4章 物权法 · 二刷", "u": "担保物权①：抵押权设立与实现", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-30", "d": "第4章 物权法 · 二刷", "u": "担保物权②：质权、留置权、并存规则+客观题40", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-03-31", "d": "第5章 合同法 · 二刷", "u": "合同订立：要约与承诺、格式条款", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-01", "d": "第5章 合同法 · 二刷", "u": "合同效力、履行、代位权与撤销权", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-02", "d": "第5章 合同法 · 二刷", "u": "保证与定金、变更转让、违约责任", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-03", "d": "第5章 合同法 · 二刷", "u": "典型合同①：买卖、赠与、借款、租赁", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-04", "d": "第5章 合同法 · 二刷", "u": "典型合同②：承揽、建设工程、运输+客观题50", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-05", "d": "第6章 票据与证券法 · 二刷", "u": "票据权利与行为、抗辩、汇票/本票/支票", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-06", "d": "第6章 票据与证券法 · 二刷", "u": "证券发行与交易、信息披露、上市公司收购", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-07", "d": "第6章 票据与证券法 · 二刷", "u": "保险法律制度：保险合同、人身/财产保险", "h": 1.5, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-08", "d": "第7章 财政法 · 二刷", "u": "预算法律制度、政府采购程序、国有资产管理", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-09", "d": "第7章 财政法 · 二刷", "u": "章节客观题40+全书法条框架梳理", "h": 1.5, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-10", "d": "第2章 公司法 · 二刷", "u": "二轮：组织形式与治理 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-11", "d": "第2章 公司法 · 二刷", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-12", "d": "第3章 合伙企业法 · 二刷", "u": "二轮：责任承担对比 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-13", "d": "第3章 合伙企业法 · 二刷", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-14", "d": "第1章 总论 · 二刷", "u": "二轮：仲裁/复议/诉讼 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-15", "d": "第1章 总论 · 二刷", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-16", "d": "第4章 物权法 · 二刷", "u": "二轮：担保物权 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-17", "d": "第4章 物权法 · 二刷", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-18", "d": "第5章 合同法 · 二刷", "u": "二轮：合同效力与违约 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-19", "d": "第5章 合同法 · 二刷", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-20", "d": "第6章 票据与证券法 · 二刷", "u": "二轮：票据权利 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-21", "d": "第6章 票据与证券法 · 二刷", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-22", "d": "第7章 财政法 · 二刷", "u": "二轮：预算与采购 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-23", "d": "第7章 财政法 · 二刷", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-24", "d": "第8章 保险法 · 二刷", "u": "二轮：保险合同 数字/期限/比例归类表", "h": 1.2, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-25", "d": "第8章 保险法 · 二刷", "u": "二轮：客观题60道+简答模板仿写1道", "h": 1.5, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-26", "d": "专项 · 二刷", "u": "全书易混点对照表（自建）", "h": 2.0, "test": false, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-27", "d": "专项 · 二刷", "u": "客观题限时训练100道", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}, {"date": "2027-04-28", "d": "专项 · 二刷", "u": "简答题模板定稿（结论+法条+分析）", "h": 2.0, "test": true, "tag": "② 精讲二遍", "base": false}], "color": ""}, {"key": "r3s", "sub": "实务", "name": "③ 强化", "start": "2027-05-17", "end": "2027-07-27", "units": [{"date": "2027-05-17", "d": "真题第1套 · 专题精讲", "u": "近5年真题第1套（限时150分钟）", "h": 2.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-18", "d": "真题第1套 · 专项练1", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-19", "d": "真题第1套 · 专项练2", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-20", "d": "真题第1套 · 专项练3", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-21", "d": "真题第1套 · 错题回炉", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-22", "d": "真题第1套 · 验收", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-23", "d": "错题溯源 · 专题精讲", "u": "第1套错题回章节重听+重做", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-24", "d": "错题溯源 · 专项练1", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-25", "d": "错题溯源 · 专项练2", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-26", "d": "错题溯源 · 专项练3", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-27", "d": "错题溯源 · 错题回炉", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-28", "d": "错题溯源 · 验收", "u": "", "h": 1.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-29", "d": "跨章① · 专题精讲", "u": "长投+企业合并+合并报表 综合2道", "h": 3.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-30", "d": "跨章① · 专项练1", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-31", "d": "跨章① · 专项练2", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-01", "d": "跨章① · 专项练3", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-02", "d": "跨章① · 错题回炉", "u": "", "h": 1.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-03", "d": "跨章① · 验收", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-04", "d": "跨章② · 专题精讲", "u": "收入+所得税 综合2道", "h": 3.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-05", "d": "跨章② · 专项练1", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-06", "d": "跨章② · 专项练2", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-07", "d": "跨章② · 专项练3", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-08", "d": "跨章② · 错题回炉", "u": "", "h": 1.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-09", "d": "跨章② · 验收", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-10", "d": "跨章③ · 专题精讲", "u": "固资/无形+借款费用+减值 计算2道", "h": 2.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-11", "d": "跨章③ · 专项练1", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-12", "d": "跨章③ · 专项练2", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-13", "d": "跨章③ · 专项练3", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-14", "d": "跨章③ · 错题回炉", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-15", "d": "跨章③ · 验收", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-16", "d": "跨章④ · 专题精讲", "u": "金融资产+长投转换+所得税 综合2道", "h": 3.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-17", "d": "跨章④ · 专项练1", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-18", "d": "跨章④ · 专项练2", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-19", "d": "跨章④ · 专项练3", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-20", "d": "跨章④ · 错题回炉", "u": "", "h": 1.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-21", "d": "跨章④ · 验收", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-22", "d": "真题第2套 · 专题精讲", "u": "第2套限时+错题溯源", "h": 3.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-23", "d": "真题第2套 · 专项练1", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-24", "d": "真题第2套 · 专项练2", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-25", "d": "真题第2套 · 专项练3", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-26", "d": "真题第2套 · 错题回炉", "u": "", "h": 1.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-27", "d": "真题第2套 · 验收", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-28", "d": "分录默写 · 专题精讲", "u": "长投/合并/收入/租赁 分录默写", "h": 2.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-29", "d": "分录默写 · 专项练1", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-30", "d": "分录默写 · 专项练2", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-01", "d": "分录默写 · 专项练3", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-02", "d": "分录默写 · 错题回炉", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-03", "d": "分录默写 · 验收", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-04", "d": "薄弱攻坚 · 专题精讲", "u": "按错题自选1—2章重听", "h": 3.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-05", "d": "薄弱攻坚 · 专项练1", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-06", "d": "薄弱攻坚 · 专项练2", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-07", "d": "薄弱攻坚 · 专项练3", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-08", "d": "薄弱攻坚 · 错题回炉", "u": "", "h": 1.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-09", "d": "薄弱攻坚 · 验收", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-10", "d": "真题第3套 · 专题精讲", "u": "近3年真题第3套（限时）", "h": 2.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-11", "d": "真题第3套 · 专项练1", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-12", "d": "真题第3套 · 专项练2", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-13", "d": "真题第3套 · 专项练3", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-14", "d": "真题第3套 · 错题回炉", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-15", "d": "真题第3套 · 验收", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-16", "d": "错题三刷 · 专题精讲", "u": "错题本第2遍+答题模板整理", "h": 2.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-17", "d": "错题三刷 · 专项练1", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-18", "d": "错题三刷 · 专项练2", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-19", "d": "错题三刷 · 专项练3", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-20", "d": "错题三刷 · 错题回炉", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-21", "d": "错题三刷 · 验收", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-22", "d": "综合演练 · 专题精讲", "u": "主观题55分整卷演练", "h": 3.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-23", "d": "综合演练 · 专项练1", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-24", "d": "综合演练 · 专项练2", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-25", "d": "综合演练 · 专项练3", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-26", "d": "综合演练 · 错题回炉", "u": "", "h": 1.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-27", "d": "综合演练 · 验收", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}], "color": ""}, {"key": "r3c", "sub": "财管", "name": "③ 强化", "start": "2027-05-17", "end": "2027-07-27", "units": [{"date": "2027-05-17", "d": "真题第1套 · 专题精讲", "u": "真题限时120分钟", "h": 2.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-18", "d": "真题第1套 · 专项练1", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-19", "d": "真题第1套 · 专项练2", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-20", "d": "真题第1套 · 专项练3", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-21", "d": "真题第1套 · 错题回炉", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-22", "d": "真题第1套 · 验收", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-23", "d": "专项·筹资 · 专题精讲", "u": "资本成本与杠杆30题", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-24", "d": "专项·筹资 · 专项练1", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-25", "d": "专项·筹资 · 专项练2", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-26", "d": "专项·筹资 · 专项练3", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-27", "d": "专项·筹资 · 错题回炉", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-28", "d": "专项·筹资 · 验收", "u": "", "h": 1.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-29", "d": "专项·投资 · 专题精讲", "u": "NPV/IRR30题", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-30", "d": "专项·投资 · 专项练1", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-31", "d": "专项·投资 · 专项练2", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-01", "d": "专项·投资 · 专项练3", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-02", "d": "专项·投资 · 错题回炉", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-03", "d": "专项·投资 · 验收", "u": "", "h": 1.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-04", "d": "真题第2套 · 专题精讲", "u": "限时+错题溯源", "h": 2.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-05", "d": "真题第2套 · 专项练1", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-06", "d": "真题第2套 · 专项练2", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-07", "d": "真题第2套 · 专项练3", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-08", "d": "真题第2套 · 错题回炉", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-09", "d": "真题第2套 · 验收", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-10", "d": "专项·营运 · 专题精讲", "u": "营运资金与EOQ30题", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-11", "d": "专项·营运 · 专项练1", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-12", "d": "专项·营运 · 专项练2", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-13", "d": "专项·营运 · 专项练3", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-14", "d": "专项·营运 · 错题回炉", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-15", "d": "专项·营运 · 验收", "u": "", "h": 1.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-16", "d": "专项·成本 · 专题精讲", "u": "差异分析30题", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-17", "d": "专项·成本 · 专项练1", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-18", "d": "专项·成本 · 专项练2", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-19", "d": "专项·成本 · 专项练3", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-20", "d": "专项·成本 · 错题回炉", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-21", "d": "专项·成本 · 验收", "u": "", "h": 1.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-22", "d": "真题第3套 · 专题精讲", "u": "限时+公式默写", "h": 2.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-23", "d": "真题第3套 · 专项练1", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-24", "d": "真题第3套 · 专项练2", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-25", "d": "真题第3套 · 专项练3", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-26", "d": "真题第3套 · 错题回炉", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-27", "d": "真题第3套 · 验收", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-28", "d": "专项·分析 · 专题精讲", "u": "杜邦与指标30题", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-29", "d": "专项·分析 · 专项练1", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-30", "d": "专项·分析 · 专项练2", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-01", "d": "专项·分析 · 专项练3", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-02", "d": "专项·分析 · 错题回炉", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-03", "d": "专项·分析 · 验收", "u": "", "h": 1.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-04", "d": "跨章计算 · 专题精讲", "u": "投资+筹资综合3道", "h": 2.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-05", "d": "跨章计算 · 专项练1", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-06", "d": "跨章计算 · 专项练2", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-07", "d": "跨章计算 · 专项练3", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-08", "d": "跨章计算 · 错题回炉", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-09", "d": "跨章计算 · 验收", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-10", "d": "模考 · 专题精讲", "u": "全真模考1套+复盘", "h": 3.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-11", "d": "模考 · 专项练1", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-12", "d": "模考 · 专项练2", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-13", "d": "模考 · 专项练3", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-14", "d": "模考 · 错题回炉", "u": "", "h": 1.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-15", "d": "模考 · 验收", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-16", "d": "主观题 · 专题精讲", "u": "计算分析+综合题步骤训练", "h": 3.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-17", "d": "主观题 · 专项练1", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-18", "d": "主观题 · 专项练2", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-19", "d": "主观题 · 专项练3", "u": "", "h": 2.4, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-20", "d": "主观题 · 错题回炉", "u": "", "h": 1.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-21", "d": "主观题 · 验收", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-22", "d": "错题三刷 · 专题精讲", "u": "错题本第2遍", "h": 2.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-23", "d": "错题三刷 · 专项练1", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-24", "d": "错题三刷 · 专项练2", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-25", "d": "错题三刷 · 专项练3", "u": "", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-26", "d": "错题三刷 · 错题回炉", "u": "", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-27", "d": "错题三刷 · 验收", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}], "color": ""}, {"key": "r3j", "sub": "经济法", "name": "③ 强化", "start": "2027-05-17", "end": "2027-07-27", "units": [{"date": "2027-05-17", "d": "客观题 · 专题精讲", "u": "魔鬼训练50题（25分钟）", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-18", "d": "客观题 · 专项练1", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-19", "d": "客观题 · 专项练2", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-20", "d": "客观题 · 专项练3", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-21", "d": "客观题 · 错题回炉", "u": "", "h": 0.9, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-22", "d": "客观题 · 验收", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-23", "d": "简答题 · 专题精讲", "u": "简答3道三段式", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-24", "d": "简答题 · 专项练1", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-25", "d": "简答题 · 专项练2", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-26", "d": "简答题 · 专项练3", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-27", "d": "简答题 · 错题回炉", "u": "", "h": 0.9, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-28", "d": "简答题 · 验收", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-29", "d": "背诵 · 专题精讲", "u": "数字/期限/比例 滚动", "h": 1.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-30", "d": "背诵 · 专项练1", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-05-31", "d": "背诵 · 专项练2", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-01", "d": "背诵 · 专项练3", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-02", "d": "背诵 · 错题回炉", "u": "", "h": 0.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-03", "d": "背诵 · 验收", "u": "", "h": 0.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-04", "d": "错题 · 专题精讲", "u": "错题重做+法条辨析", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-05", "d": "错题 · 专项练1", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-06", "d": "错题 · 专项练2", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-07", "d": "错题 · 专项练3", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-08", "d": "错题 · 错题回炉", "u": "", "h": 0.9, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-09", "d": "错题 · 验收", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-10", "d": "综合题 · 专题精讲", "u": "合同法+公司法交叉案例", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-11", "d": "综合题 · 专项练1", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-12", "d": "综合题 · 专项练2", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-13", "d": "综合题 · 专项练3", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-14", "d": "综合题 · 错题回炉", "u": "", "h": 0.9, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-15", "d": "综合题 · 验收", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-16", "d": "背诵 · 专题精讲", "u": "重点章滚动第2轮", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-17", "d": "背诵 · 专项练1", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-18", "d": "背诵 · 专项练2", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-19", "d": "背诵 · 专项练3", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-20", "d": "背诵 · 错题回炉", "u": "", "h": 0.9, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-21", "d": "背诵 · 验收", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-22", "d": "客观题 · 专题精讲", "u": "魔鬼训练50题+复盘", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-23", "d": "客观题 · 专项练1", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-24", "d": "客观题 · 专项练2", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-25", "d": "客观题 · 专项练3", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-26", "d": "客观题 · 错题回炉", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-27", "d": "客观题 · 验收", "u": "", "h": 1.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-28", "d": "简答模板 · 专题精讲", "u": "模板默写+套用", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-29", "d": "简答模板 · 专项练1", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-06-30", "d": "简答模板 · 专项练2", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-01", "d": "简答模板 · 专项练3", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-02", "d": "简答模板 · 错题回炉", "u": "", "h": 0.9, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-03", "d": "简答模板 · 验收", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-04", "d": "综合 · 专题精讲", "u": "整卷主观题模拟", "h": 2.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-05", "d": "综合 · 专项练1", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-06", "d": "综合 · 专项练2", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-07", "d": "综合 · 专项练3", "u": "", "h": 1.6, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-08", "d": "综合 · 错题回炉", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-09", "d": "综合 · 验收", "u": "", "h": 1.0, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-10", "d": "背诵 · 专题精讲", "u": "易混法条对照表复述", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-11", "d": "背诵 · 专项练1", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-12", "d": "背诵 · 专项练2", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-13", "d": "背诵 · 专项练3", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-14", "d": "背诵 · 错题回炉", "u": "", "h": 0.9, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-15", "d": "背诵 · 验收", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-16", "d": "客观 · 专题精讲", "u": "错题+新题混合50道", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-17", "d": "客观 · 专项练1", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-18", "d": "客观 · 专项练2", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-19", "d": "客观 · 专项练3", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-20", "d": "客观 · 错题回炉", "u": "", "h": 0.9, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-21", "d": "客观 · 验收", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-22", "d": "模考 · 专题精讲", "u": "全真模考", "h": 1.5, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-23", "d": "模考 · 专项练1", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-24", "d": "模考 · 专项练2", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-25", "d": "模考 · 专项练3", "u": "", "h": 1.2, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-26", "d": "模考 · 错题回炉", "u": "", "h": 0.9, "test": true, "tag": "③ 强化", "base": false}, {"date": "2027-07-27", "d": "模考 · 验收", "u": "", "h": 0.8, "test": true, "tag": "③ 强化", "base": false}], "color": ""}, {"key": "r4s", "sub": "实务", "name": "④ 冲刺", "start": "2027-08-01", "end": "2027-09-04", "units": [{"date": "2027-08-01", "d": "模考①", "u": "8:30-11:00 严格限时机考", "h": 3, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-02", "d": "模考①复盘", "u": "逐题复盘：错因+考点", "h": 2.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-03", "d": "模考②", "u": "限时+合并商誉专项", "h": 3, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-04", "d": "复盘+默写", "u": "模考②复盘+分录默写", "h": 2.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-05", "d": "模考③", "u": "限时+收入五步法专项", "h": 3, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-06", "d": "白纸默写", "u": "合并调整抵销分录默写", "h": 2.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-07", "d": "模考④", "u": "限时+所得税专项", "h": 3, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-08", "d": "错题三刷", "u": "错题本第3遍+易混对照", "h": 2.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-09", "d": "考前", "u": "只看错题本+分录清单", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-10", "d": "考前", "u": "答题模板再过一遍，早睡", "h": 1, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-11", "d": "考前", "u": "调整状态，不再做新题", "h": 1, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-12", "d": "考前", "u": "考场流程与工具确认", "h": 0.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-13", "d": "真题卷·实务 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-14", "d": "综合题专练 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-15", "d": "错题回炉 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-16", "d": "考前背诵 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-17", "d": "真题卷·实务 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-18", "d": "综合题专练 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-19", "d": "错题回炉 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-20", "d": "考前背诵 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-21", "d": "真题卷·实务 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-22", "d": "综合题专练 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-23", "d": "错题回炉 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-24", "d": "考前背诵 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-25", "d": "真题卷·实务 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-26", "d": "综合题专练 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-27", "d": "错题回炉 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-28", "d": "考前背诵 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-29", "d": "真题卷·实务 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-30", "d": "综合题专练 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-31", "d": "错题回炉 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-01", "d": "考前背诵 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-02", "d": "真题卷·实务 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-03", "d": "综合题专练 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-04", "d": "错题回炉 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}], "color": ""}, {"key": "r4c", "sub": "财管", "name": "④ 冲刺", "start": "2027-08-01", "end": "2027-09-04", "units": [{"date": "2027-08-01", "d": "模考", "u": "17:00-19:00 真实时段机考", "h": 2, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-02", "d": "复盘", "u": "复盘+公式默写", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-03", "d": "专项", "u": "计算分析题2道（步骤得分）", "h": 2, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-04", "d": "专项", "u": "综合题2道", "h": 2, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-05", "d": "模考", "u": "限时模考", "h": 2, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-06", "d": "复盘", "u": "错题+公式第3轮", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-07", "d": "专项", "u": "指标类速算训练", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-08", "d": "模考", "u": "限时模考", "h": 2, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-09", "d": "复盘", "u": "机考计算器操作专项", "h": 1, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-10", "d": "考前", "u": "公式手册通读", "h": 1, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-11", "d": "真题卷·财管 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-12", "d": "计算分析专练 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-13", "d": "公式默写 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-14", "d": "错题回炉 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-15", "d": "真题卷·财管 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-16", "d": "计算分析专练 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-17", "d": "公式默写 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-18", "d": "错题回炉 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-19", "d": "真题卷·财管 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-20", "d": "计算分析专练 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-21", "d": "公式默写 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-22", "d": "错题回炉 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-23", "d": "真题卷·财管 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-24", "d": "计算分析专练 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-25", "d": "公式默写 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-26", "d": "错题回炉 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-27", "d": "真题卷·财管 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-28", "d": "计算分析专练 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-29", "d": "公式默写 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-30", "d": "错题回炉 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-31", "d": "真题卷·财管 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-01", "d": "计算分析专练 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-02", "d": "公式默写 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-03", "d": "错题回炉 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-04", "d": "真题卷·财管 7", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}], "color": ""}, {"key": "r4j", "sub": "经济法", "name": "④ 冲刺", "start": "2027-08-01", "end": "2027-09-04", "units": [{"date": "2027-08-01", "d": "背诵", "u": "重点法条滚动第3轮", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-02", "d": "模考", "u": "13:00-15:00 真实时段", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-03", "d": "复盘", "u": "易混法条对照", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-04", "d": "简答", "u": "模板速写3道", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-05", "d": "背诵", "u": "客观题高频点", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-06", "d": "模考", "u": "限时模考", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-07", "d": "复盘", "u": "错题+法条辨析", "h": 1.5, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-08", "d": "考前", "u": "只看划线法条", "h": 1, "test": true, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-09", "d": "真题卷·经济法 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-10", "d": "简答题模板 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-11", "d": "法条背诵 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-12", "d": "错题回炉 1", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-13", "d": "真题卷·经济法 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-14", "d": "简答题模板 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-15", "d": "法条背诵 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-16", "d": "错题回炉 2", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-17", "d": "真题卷·经济法 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-18", "d": "简答题模板 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-19", "d": "法条背诵 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-20", "d": "错题回炉 3", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-21", "d": "真题卷·经济法 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-22", "d": "简答题模板 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-23", "d": "法条背诵 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-24", "d": "错题回炉 4", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-25", "d": "真题卷·经济法 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-26", "d": "简答题模板 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-27", "d": "法条背诵 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-28", "d": "错题回炉 5", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-29", "d": "真题卷·经济法 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-30", "d": "简答题模板 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-08-31", "d": "法条背诵 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-01", "d": "错题回炉 6", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-02", "d": "真题卷·经济法 7", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-03", "d": "简答题模板 7", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}, {"date": "2027-09-04", "d": "法条背诵 7", "u": "", "h": 2.0, "test": false, "tag": "④ 冲刺", "base": false}], "color": ""}];
+
+/* ============ 每日提醒池 ============ */
+const Q = ["你昨天说“明天一定开始”，今天是第几个明天了？", "拖延不痛，拖到最后才发现来不及才痛。", "你现在刷手机的这30分钟，就是别人多做一套题的30分钟。", "不想学的时候学20分钟，也比躺着强。", "你不是没时间，你是把时间给了短视频。", "惰性不需要理由，它自己会长大。", "考上的人和没考上的人，差的不是智商，是每天那两个小时。", "把手机放到另一个房间，比任何自律App都管用。", "打开书的动作最难，打开后就不难了。", "你偷的每一个懒，考场上都会还回来。", "今天不学，明天更不想学——拖延是有复利的。", "别等“有状态”再开始，状态是开始之后才来的。", "你说“累了一天”，可你刷手机三小时不累。", "现在偷懒一分钟，九月坐在考场就慌一分钟。", "目标不是“学一会儿”，是“学完这一节”。", "不要为懒惰找借口，要为行动找方法。", "你今天放弃的，是明年那个拿到证书的自己。", "开始前先做5分钟，剩下的交给惯性。", "没有人会替你做题，没有人能替你考试。", "三分钟热度的人，永远在等下一次热情。", "别把“计划”当成“已经做了”。", "你落下的不是课，是对自己的信任。", "闹钟响了就起，别让“再躺五分钟”吃掉一整章。", "推迟一次是意外，推迟三次就是习惯。", "你觉得来不及的时候，恰恰是最该开始的时候。", "今天不学，就在给明年的自己加负担。", "学习不是等你闲了才做的事，是你必须挤出来的事。", "一天不学，退三天；三天不学，从零开始。", "别用“我基础好”骗自己，中级不是初级。", "别用“我工作忙”骗自己，忙的人通过率反而高。", "你不是学不会，你是不肯坐到桌前。", "所有“明天”，最后都会变成“来不及”。", "每天两小时，十个月就是六百小时。你打算什么时候攒？", "不想动机的时候，先动笔。", "把“我好累”换成“我先做十分钟”。", "你在等一个完美的开始，它会一直不来。", "舒服的今天，换来焦虑的八月。", "别刷了，你的竞争对手正在做第三章。", "没有状态的借口，用一次就够了。", "学习这件事，越拖越难，越难越拖。", "今天欠的账，考场上按利息还你。", "别让“就看一下手机”变成两小时。", "翻开书，你只需要战胜开头的五分钟。", "懒惰很安静，它只是让你“晚点再开始”。", "再拖，你的计划就只是纸上的一堆字。", "你不想学的今天，是别人赶超你的一天。", "你不是在偷懒，你是在给失败铺路。", "把“差不多就行”从你的字典里删掉。", "别假装努力，结果不会陪你演。", "坐在桌前发呆也是学，躺着刷手机永远不是。", "你缺的不是方法，是开始。", "拖延的人最爱说“还有时间”。", "还有322天，听起来很多，但每天只有2小时。", "别等心情好，心情不会等你。", "今天少学一小时，八月要多熬一星期。", "你的懒惰，正在替别人清出名额。", "不要用“明天补”来安慰自己，明天也有明天的课。", "不想学就学5分钟，5分钟后你就不想停了。", "你今天觉得“太难了”，是因为你昨天没学。", "别让手机做你的主人。", "所有没开始的计划，都等于没计划。", "自律不是天生的，是每天逼自己一次练出来的。", "懒惰的代价，明年九月才结算。", "你已经比别人慢了，还要再慢下去吗？", "别把学习当成“有空再说”，它是“先说再做”。", "看到这句话，就去把那章打开。", "你不是没天赋，你是不够狠。", "对自己狠一点，考试就对你温柔一点。", "计划没有完成，是因为你把它当建议。", "拖延不需要治疗，只需要开始。", "手机放下，书翻开，就这么简单。", "别把“学了”当成“学会了”，更别把“打算学”当成“学了”。", "你今天的懈怠，会成为明年的遗憾。", "不做题的学习，是自我感动。", "没有人能替你坚持，除了你自己。", "如果连两小时都拿不出来，就别谈三科全过。", "你在朋友圈看别人的进度，别人在书桌前看你的借口。", "每次想放弃，就想想你为什么要考。", "懒惰会伪装成“休息一下”。", "今天不学，明天就有两个今天的量。", "借口越多，成绩越差。", "你不是在等时间，你是在耗时间。", "现在开始，还来得及；再等一个月，就来不及了。", "别把“周末补”当成万能药，周末也有周末的事。", "学习最怕的不是难，是断。", "断了三天，前面的努力就开始贬值。", "别让“明天”成为你唯一的学习计划。", "你不是懒，你是不敢面对自己不会。", "承认不会，才能开始会。", "最难的不是合并报表，是坐下来。", "别拖到八月才开始后悔，那时没人能帮你。", "每天两小时，坚持十个月，这是唯一的捷径。", "你觉得苦，是因为你在走上坡路。", "现在的每一次偷懒，都在给未来的自己挖坑。", "你的拖延症，正在替考办省钱。", "不要等“准备好了”，永远没有那一天。", "今天开始的人，才配谈结果。", "你不学，书不会自己跑到你脑子里。", "把“等会儿”三个字从今天开始禁掉。", "别再用“工作累”当挡箭牌，你还有力气刷手机。", "懒惰是需要付利息的，而且是高利贷。", "一次松懈不可怕，可怕的是你习惯了松懈。", "你不是记不住，你是没重复够。", "别在最后一个月才开始背，那时你会崩。", "考场上的慌张，全是平时的懒惰攒出来的。", "你说“明天开始”，其实你知道自己不会。", "今天翻开的这一页，就是你和别人的差距。", "不想学的时候，就更要学。", "每天两小时，不是要求，是底线。", "别让懒惰变成你的性格。", "不要用“还有十个月”来麻痹自己。", "十个月，一眨眼就没了。", "你现在的舒服，是拿未来换的。", "别把“一次没学”变成“这周算了”。", "今天没有进度，明天就没有底气。", "学习不进则退，退得比你想的快。", "拖延不是病，但它会要了你的证。", "翻书、听课、做题——做完这三件，今天才算过。", "别把学习计划当成待办清单里最不重要的一项。", "你总有时间刷手机，却没时间打开课件。", "懒惰的尽头，是九月考场上的空白。", "你不需要动力，你需要纪律。", "动力会消失，纪律会留下。", "今天不做的事，明天会以双倍的量回来。", "别用“我在思考”骗自己，你在发呆。", "把手机静音，把书打开，别想太多。", "每一次想滑走，都是你在放弃自己。", "你不是学不完，你是没开始学。", "你要的不是鸡汤，是开始。", "现在立刻，做一页题。", "别做那个总说“下个月”的人。", "进度条不会自己走，你得推它。", "你落下的每一章，都在八月的深夜里等你。", "学习这件事，只有0次和无数次。", "别让今天的懒，变成明天的慌。", "你今天的借口，就是明天的眼泪。", "想放弃时，再撑10分钟。", "你不需要完美的计划，你需要今天的行动。", "不要等别人催你，成年人的学习靠自己。", "你的自律，决定了你九月的表情。", "别把两小时拆成十个“等会儿”。", "学到烦的时候，正是进步的时候。", "你不是不够聪明，你是不够持续。", "每天2小时，是给自己最后一次机会。", "别让“太累了”成为你最熟练的台词。", "懒惰的人最爱说：明天一定。", "所有的“明天一定”，最后都变成了“明年再说”。", "今天开始，明年拿证；明天开始，明年再考。", "你的时间花在哪里，结果就在哪里。", "你敢不敢今天就把第13章学完？", "别在深夜焦虑，在白天行动。", "你现在逃避的，将来一定要面对。", "不想学，就想想报名费已经交了。", "没人管你，才更要管住自己。", "你的懒惰，只有你自己能治。", "别让“休息一下”变成“今天就到这”。", "做题的时候不要看答案，那是在骗自己。", "你今天的进度，是你明年的底气。", "把计划写在纸上，比记在脑子里强十倍。", "完成比完美重要，开始比计划重要。", "懒惰不会让你轻松，只会让你更焦虑。", "焦虑的根源，是你知道自己没做。", "你欠自己的，只能用行动还。", "别拿“忙”当借口，比你还忙的人已经学完一轮了。", "不想看课，就先做10道题。", "今天动一动，明天少慌一点。", "一个月不学，你的记忆会还给你一片空白。", "别把“复习”当成“重学”的借口。", "学习要趁早，越晚越贵。", "你已经落后了，还要再犹豫吗？", "把“我需要准备一下”改成“我现在开始”。", "不想面对书，就先面对5分钟。", "别让情绪决定你今天学不学。", "你今天浪费时间的方式，决定你明年查分的心情。", "每周不断档，比每天学很久更重要。", "你以为的“明天补”，其实是“永远不补”。", "不是时间不够，是你把时间给了不重要的事。", "你今天打开了几次短视频？", "学习不是为了感动自己，是为了通过考试。", "别再刷“如何高效学习”了，去学。", "你看的每一篇经验帖，都不能替你考。", "现在关掉这个页面，去看书。", "每天第一个小时最难，熬过去就顺了。", "别把“我今天很忙”当成勋章。", "你的对手没有休息日。", "你休息的时候，有人在追你。", "别让惰性拥有你的晚上八点到十点。", "一到晚上就想躺，那你永远学不完。", "把学习时间定死，别让它浮动。", "固定时间、固定位置、固定动作，习惯就来了。", "不要等有心情，定好时间就坐下去。", "你已经在拖延上浪费了太多时间。", "今天偷懒，就是在给明年的自己加难度。", "不要再从第一章开始重学，往前推。", "你的计划不是摆设，别再让它落灰。", "今天有今天的事，别推到明天。", "懒惰是一天的选择，也是十年的习惯。", "你给自己找的每一个理由，都在拖慢你。", "别对自己太宽容，考试不会。", "你说“差不多了”，其实还差很远。", "多学一章，考场就多一分从容。", "少学一章，考场就多一分慌张。", "不要在最该拼的时候选择舒服。", "你还有322天，但只有644个小时。", "每天两小时，是你给自己定的最低承诺。", "违背自己的承诺，比考不过更可怕。", "说到做到，从今天的两小时开始。", "别让自己看不起自己。", "你可以慢，但不能停。", "停一天是休息，停一周是重来。", "你今天的努力，会成为明天的习惯。", "别让“明天再说”成为你的墓志铭。", "不想学的时候，想想报名那天你的决心。", "决心不是嘴上说的，是每天晚上那两个小时。", "书翻开了，手机就该合上。", "做题不要边做边看答案，那是自欺欺人。", "学不会没关系，不学才致命。", "每一次想放弃，都问自己：真的要明年再来一次吗？", "再考一年的成本，比现在辛苦十倍。", "你今天省下的力气，明年要加倍还。", "不要等到八月才想起还有三科。", "把“以后”改成“现在”。", "别让懒惰替你做决定。", "你今天做的选择，就是明年九月的结果。", "不要指望考前突击，中级三科突击不了。", "你的执行力，才是你唯一的天赋。", "计划做得再漂亮，不做等于零。", "今天先完成，再谈优化。", "别让“再刷五分钟”变成两小时。", "每一次妥协，都在削弱你的自控力。", "把手机放在看不见的地方。", "你需要的不是更多时间，是更少干扰。", "今天不学，明天就要用双倍时间补。", "学习这件事，只能靠你自己。", "你可以骗任何人，骗不了成绩单。", "别把“努力过”当成“尽力了”。", "你的努力，要能经得起检查。", "每天问自己：今天真的学了吗？", "没做题的一天，不算学习的一天。", "不想开始的时候，就数三个数然后坐下。", "三、二、一，坐下，翻开。", "别再纠结学什么，先学手边这本。", "你不是缺资料，你缺行动。", "手机里的收藏夹，救不了你的考试。", "你收藏的干货，一条都没看吧？", "从今天开始，每天只做一件事：不断档。", "断档是拖延最好的朋友。", "别给自己放“今天例外”的假。", "例外多了，就成了常态。", "你需要的是坚持，不是鸡血。", "鸡血三天就没了，习惯能撑十个月。", "把学习变成刷牙一样的事。", "不用等想学，时间到了就学。", "你今天的懒散，会在八月变成恐慌。", "不要高估一天的效率，也别低估十个月的积累。", "每天两小时，你会看到复利。", "懒惰是唯一会自己长大的东西。", "别让“今天很累”成为你的日常理由。", "想躺下的时候，先做完这十道题。", "你睡着的时候，别人在背法条。", "你在刷剧，别人在刷真题。", "九月考场，只看结果，不看苦劳。", "你今天的每一分钟，都在给九月定价。", "别让自己在考场上后悔。", "现在开始，永远不晚；再拖一个月，就真的晚了。", "别用“我还没准备好”当借口，没人准备好了才上考场。", "学着学着就会了，等着等着就废了。", "你不需要等到状态好，状态是学出来的。", "今天先做最不想做的那一科。", "先啃硬骨头，别总在第一章打转。", "总在舒适区，永远过不了关。", "别把简单章节反复看，那是在逃避。", "你逃得掉今天的难点，逃不掉考场上的那道题。", "做了才有资格说难。", "没做就说难，是懒惰的托词。", "今天把长投啃下来，你就赢了一半。", "长投不会自己变简单，但你会变强。", "你拖一天，长投就多吓你一天。", "恐惧来自不熟悉，熟悉来自重复。", "重复到第三遍，你会觉得它不过如此。", "别怕慢，怕的是你根本没动。", "每天挪一点，也比原地焦虑好。", "你焦虑，是因为你知道自己该做什么却没做。", "行动是唯一解药。", "现在做一件小事，就能打断拖延。", "别想太久，想久了就不做了。", "做完再说想不想。", "你做不完，是因为你总想一次做完。", "拆成小任务，一次只做一节。", "目标越小，越容易开始。", "今天只学20分钟，也算赢。", "完美主义是拖延的另一种伪装。", "别等准备好了，边做边准备。", "你不是懒，你是怕做不好。", "先做烂，再做好。", "第一版永远难看，但比没有强。", "完成今天，就是对明天最好的投资。", "你今天的坚持，会在八月救你一命。", "每个不想学的夜晚，都是一次选择。", "选择舒服，就等于选择再来一年。", "别拿青春赌明天。", "你还有多少个明年可以浪费？", "一次不过，三科重来，代价太大。", "把这次当成最后一次。", "破釜沉舟，才考得过。", "给自己留后路，就会走下坡路。", "告诉自己：只考一次。", "你今天的表现，配得上你的目标吗？", "想拿证，就拿出拿证的样子。", "每天两小时，是最低配，不是高标准。", "你连最低配都做不到，凭什么过？", "不要用“尽力了”安慰自己。", "真正的尽力，是每天都在做。", "你的计划表会揭穿你。", "打卡不是形式，是证据。", "没有记录的努力，往往都是自我安慰。", "今天打勾了吗？", "看着空白的格子，你不难受吗？", "昨天的空格，今天补不回来了。", "别让格子一直空着。", "连续打卡七天，你会尝到甜头。", "坚持21天，习惯就长出来了。", "前几天最难，撑过去就顺了。", "别在第一周就放弃。", "放弃一次，就会有第二次。", "一次破例，是滑坡的开始。", "守住今天，才能守住整月。", "每月只要断三天，节奏就乱了。", "你的敌人不是考试，是惰性。", "打败惰性，只需要今天坐下。", "战胜自己一次，你就强一分。", "每天赢一次，十个月后你就是另一个人。", "别把“我性格就这样”当借口。", "性格可以改，习惯先改。", "今天先改一件事：不拖延。", "你不需要变完美，只需要持续。", "持续两个月，你会感谢今天的自己。", "懒惰的反面不是勤奋，是开始。", "先开始，再谈坚持。", "别让今天的犹豫，变成明天的遗憾。", "你现在犹豫的时间，够做十道题了。", "别再想了，去做。", "你的问题不是不会，是不做。", "所有的“我不会”，都能在做过三遍后变成“我会”。", "不会就去学，别抱怨。", "抱怨一小时，不如做题十分钟。", "别在群里聊进度，去做进度。", "看别人打卡，不如自己打卡。", "你的时间，不该花在围观别人上。", "关上这个App，去打开课件。", "手机不是学习工具，是拖延工具。", "把它扔远一点。", "今天的专注，是明天的分数。", "专注两小时，胜过摸鱼五小时。", "别一边看课一边聊天。", "一心二用，等于没学。", "全神贯注一小时，效果超过浑浑噩噩半天。", "学习时间要计时，别凭感觉。", "你以为学了两小时，其实只有四十分钟。", "计时会让你的效率翻倍。", "别自我欺骗了。", "诚实地面对你的进度。", "你的进度条不会说谎。", "看看你的正确率，清醒了吗？", "正确率低不可怕，不去改才可怕。", "错题不改，下次还错。", "错题本不是收藏夹。", "回头看一眼错题，比做新题有用。", "别贪多，把错的做对。", "你今天做的题，有多少是重复错的？", "重复错同一道题，是在浪费生命。", "搞清楚错因，比刷题量重要。", "别用刷题掩盖思考的懒惰。", "想不明白就问，别硬拖。", "拖着不解决，问题会变大。", "今天的一个疑问，明天会变成十个。", "当天的问题当天清。", "不留隔夜账。", "别把不会的攒到八月。", "攒到最后，就是放弃。", "你放弃的不是一门课，是一整年。", "想想报名时你有多想考过。", "想想拿到证的心情。", "再想想没考过的尴尬。", "面子不重要，证书重要。", "别在意别人怎么看，先过自己的关。", "你只跟自己比。", "今天的你，比昨天多一小时，就赢了。", "比进度更重要的，是不断。", "不断，就是最快的路。", "别追求快，追求稳。", "稳到考前，就赢了大多数人。", "大多数人都倒在中途。", "你只要不倒下，就赢了一半。", "另一半，靠八月的那几套模考。", "别等八月才做模考，那时来不及了。", "现在就开始练速度。", "考试是要写出来的，不是听懂就行。", "听懂≠会做，会做≠做对，做对≠做得快。", "四层都要过。", "别停在第一层自我感动。", "合上书能写出来，才叫会。", "现在合上书，默一遍分录。", "默不出来，就是没会。", "别怕露馅，早露馅是好事。", "考场上露馅，就晚了。", "今天多露一次，考场少慌一次。", "你要的是分数，不是感觉。", "感觉良好的人，常常考不过。", "老老实实做题，别赌。", "赌运气的人，通常运气不好。", "别把希望寄托在押题上。", "押题是锦上添花，不是救命稻草。", "基础不牢，押中也没用。", "打牢基础，比什么都强。", "别急着刷真题，先过一轮。", "一轮没过就刷真题，是浪费真题。", "按计划走，别乱跳。", "每天按课表来，不用每天做决定。", "做决定最耗精力，交给课表。", "打开App，照着做，别想太多。", "执行比思考重要。", "今天先执行，明天再优化。", "你的计划已经够好了，现在缺的是做。", "别再改计划了，改了十版也没开始。", "计划是用来做的，不是用来改的。", "开始比完美更重要。", "今天就开始，别等下周。", "下周一是个陷阱。", "每周一重新开始的人，永远停在第一周。", "从今天开始，不等节点。", "别等新年，别等下月，就今天。", "今天，就现在。", "看完这段，立刻去学。", "别再往下滑了。", "关掉页面，去学习。", "你今天不动，明天更不想动。", "拖延是会上瘾的。", "别让自己上瘾。", "你今天的选择，决定你明天的自由。", "证书不会自己飞到你手里。", "每天两小时，换一张证，很划算。", "连两小时都舍不得，就别抱怨考不过。", "你舍不得的，其实是舒服。", "舒服是暂时的，证书是长久的。", "别拿当下的爽，换未来的苦。", "先苦后甜，还是先甜后苦，你选。", "你现在就在选。", "每一次滑动，都是一次投票。", "你在给自己投票：放弃还是坚持。", "投票给自己一次。", "今天投坚持。", "明天也投坚持。", "投满十个月，你就赢了。", "赢不是靠运气，是靠次数。", "次数靠每天累加。", "今天加一次。", "别让今天的次数是零。", "零是最危险的数字。", "0到1最难。", "开始了就成功一半。", "剩下的靠重复。", "重复到不用想。", "不用想也能做，就是习惯。", "习惯建立需要21天。", "你已经浪费了多少个21天？", "现在开始第一个。", "别数日子，数章节。", "一章一章来。", "今天做一章。", "明天再做一章。", "不知不觉就过完了。", "你会惊讶于自己的速度。", "前提是你今天开始。", "不开始，永远在第一章。", "第一章已经待太久了。", "往前走，别回头。", "回头重学是最浪费时间的。", "已经学过的，快速过。", "别在熟悉的地方反复停留。", "舒适区是拖延的温床。", "去啃不会的。", "不会的才是分数。", "会做的题，考场上只值那么几分。", "决定成败的是不会的。", "所以别躲。", "直面难点。", "今天就直面一个。", "痛点解决一个，信心涨一分。", "信心是攒出来的。", "不是喊出来的。", "别喊口号，做题。", "口号喊多了，自己都信了。", "行动才值得信。", "今天就给一个行动。", "哪怕只有十分钟。", "十分钟也算数。", "别瞧不起十分钟。", "十分钟能背五个法条。", "十分钟能做三道选择题。", "十分钟能看一个知识点。", "积少成多。", "小步快跑。", "别想着一次学完。", "学完是结果，不是过程。", "过程是每天一点点。", "一点点也是进步。", "进步值得记录。", "记录下来，你会看到变化。", "变化需要时间。", "给它时间，也给你自己时间。", "但不要给它借口。", "借口是拖延的燃料。", "断掉燃料。", "今天不找理由。", "只找方法。", "方法就是坐下。", "坐下，翻开，读第一句。", "第一句读完，第二句就不难了。", "难的是第一句。", "所以只管第一句。", "剩下的会自己走。", "惯性会帮你。", "先给它一个推动力。", "推动力就是现在的你。", "现在就是最好的时机。", "没有更好的时机了。", "等它来，不如造它。", "你今天就能造。", "造一个两小时的专注。", "造完你会很爽。", "那种爽比刷手机持久。", "试试看。", "试一次你就知道。", "不上瘾才怪。", "学习也会上瘾。", "前提是你先尝到甜头。", "甜头在第一次做对题的时候。", "在第一次自己写出分录的时候。", "那一刻很值。", "为了那一刻，现在坐下。", "别错过它。", "它今天就能来。", "只要你开始。", "开始吧。", "别想了。", "就现在。", "放下手机。", "坐下来。", "翻开书。", "读第一行。", "你已经开始了。", "这比什么都强。", "接下来交给时间。", "时间会给你答案。", "答案在九月。", "九月想笑，现在就得熬。", "熬过去就是你的。", "熬不过去就是别人的。", "你想当哪个？", "想当哪个就现在开始。", "现在开始的人，才有资格选。", "不开始的人，只能被动接受。", "被动接受，就是再来一年。", "再来一年，你会更痛苦。", "因为你会重复今天的一切。", "重复拖延、重复焦虑、重复后悔。", "打破循环的唯一方式。", "就是今天动一次。", "动一次，循环就断了。", "断了就开始新的。", "新的循环叫坚持。", "坚持十个月。", "十个月后你会感谢自己。", "感谢今天没有躺下。", "感谢今天翻开了书。", "感谢今天多做了十道题。", "这些都是你给的礼物。", "现在开始送。", "别等到来不及才后悔。", "后悔是最没用的情绪。", "行动才有用。", "行动从此刻开始。", "此刻就是分水岭。", "此刻之前是拖延。", "此刻之后是执行。", "选执行。", "执行会给你自由。", "自由在明年十月。", "拿到证的那天。", "你会想起今天。", "想起今天这十分钟。", "它改变了一切。", "起床不是为了刷手机，是为了做题。", "你连早起都做不到，还想三科全过？", "今晚不学，明天就更没脸学。", "把“我明天一定”改成“我现在就”。", "懒惰的人最擅长给懒惰找理由。", "别拿孩子当借口，你在孩子面前刷手机的时候可没这么忙。", "孩子看着你学习，比你说一百遍“要努力”都有用。", "你想让孩子自律，先自己自律。", "妈妈的坚持，是孩子最好的榜样。", "你学不学，孩子都在看。", "别让孩子学会你的拖延。", "今天你多学一小时，孩子就多一个理由相信努力有用。", "考过之后，你能教孩子什么叫不放弃。", "你的证书，是给孩子最好的身教。", "别把“等孩子睡了再学”变成“孩子睡了我刷手机”。", "别嫌补地基慢，第13章之后的每一章，都长在第1—12章上面。", "正确率不到60%就往下学，是在给合并报表埋雷。", "做题不是检查会不会，是把它变成会。", "断了18天不可怕，可怕的是拿“已经断了”当借口继续断。", "重启的最好时间是今天早上，其次是现在。", "第三次说「今天开始」了——让这一句是最后一次。", "断过的天数追不回来，但今天的20分钟能。别追，接着做。", "计划不会因为你断了一天就作废，作废的是你决定重来的那一刻。"];
+
+const MONTH_TIP={
+ '11':["11月27日四轮计划启动：精讲①开始，实务财管先行，经济法随后跟上。","四轮节奏：精讲②遍打底、强化做透题、冲刺套卷。断一天不补课、不重排。"],
+ '12':["12月1日第13章收入启动，月末结账周只保最低量，别硬凑2小时。","12月新课最密，断了就直接接着当天做，日历不会为你归零。"],
+ '1':["1月8日实务一轮收官，1月9日经济法起跑（50分基础走做题+归类路线）。","春节前这段，是全年最安静、效率最高的窗口。"],
+ '2':["2月财管二轮+经济法二轮并行，公式天天默写。","春节最容易连断七天，断完就直接接着做，别归零。"],
+ '3':["3月实务二轮：第1—12章系统重过，工作日每天1个单元。","二轮是提分期：正确率从50%到70%就靠这个月。"],
+ '4':["4月新教材对照变动，新增必考；同时开始练主观题步骤。","真题错题要按章节分类，别只记答案。"],
+ '5':["5月是三科最容易失衡的月份，别只顾着喜欢的那一科。","进度落后的人，都是在5月开始放弃的。"],
+ '6':["6月强化启动，真题必须上手，别再只听课。","报名就在这个月，报完就进入倒计时，别再拖。"],
+ '7':["7月是最后能补进度的月份，8月只能修补。","暑假不是休息，是全年最关键的一个月。"],
+ '8':["8月开始每天都要摸机考系统，别第一次上考场才见。","模考做得少，考场上就会手忙脚乱。"],
+ '9':["考前一周只看错题，不做新题，稳住就有机会。","现在慌没用，把会做的拿满分才是正事。"]
+};
+
+const $=s=>document.querySelector(s);
+const LS=(()=>{try{localStorage.setItem('__t','1');localStorage.removeItem('__t');return localStorage;}
+catch(e){const m={};return {getItem:k=>(k in m?m[k]:null),setItem:(k,v)=>{m[k]=String(v)},removeItem:k=>{delete m[k]},clear:()=>{for(const k in m)delete m[k]}};}})();
+
+const START=new Date('2026-11-27'); START.setHours(0,0,0,0);
+const TODAY=new Date(); TODAY.setHours(0,0,0,0);
+const kd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const KD=kd(TODAY);
+const EXAM=new Date('2027-09-04'); EXAM.setHours(0,0,0,0);
+const WD='日一二三四五六';
+const SUBS=['实务','财管','经济法'];
+const HEX={实务:'#E879A6',财管:'#38BFA8',经济法:'#D4A72C'};
+let curSub='实务';
+let curView='today';
+
+const DAY={};
+DATA.forEach(r=>{r.units.forEach(u=>{(DAY[u.date]||=[]).push({...u,sub:r.sub,rname:r.name,color:r.color});});});
+
+let done=JSON.parse(LS.getItem('d3')||'{}');
+let checks=JSON.parse(LS.getItem('c3')||'[]');
+let budget=Number(LS.getItem('budget')||3);
+let wrong=JSON.parse(LS.getItem('w1')||'[]');
+let pomoCount=Number(LS.getItem('pc')||0);
+const save=()=>{
+  LS.setItem('d3',JSON.stringify(done));
+  LS.setItem('c3',JSON.stringify(checks));
+  LS.setItem('budget',String(budget));
+  LS.setItem('w1',JSON.stringify(wrong));
+  LS.setItem('pc',String(pomoCount));
+};
+const uk=u=>u.sub+'|'+u.date+'|'+(u.d||'');
+const isDone=u=>(done[u.date]||[]).includes(uk(u));
+let toastT; function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),1800);}
+const daysLeft=()=>Math.max(0,Math.ceil((EXAM-TODAY)/864e5));
+const dayNo=()=>Math.max(1,Math.round((TODAY-START)/864e5)+1);
+function fmtD(s){const[y,m,d]=s.split('-').map(Number);return `${m}月${d}日`;}
+function weekStart(d){const x=new Date(d);const w=(x.getDay()+6)%7;x.setDate(x.getDate()-w);return x;}
+function curStage(){
+  const rs=DATA.filter(r=>r.sub===curSub && r.start<=KD && KD<=r.end);
+  return rs.length?[...new Set(rs.map(r=>r.name))].join(' / '):'空档 · 自由复习';
+}
+function showView(v){
+  curView=v;
+  $('#v-today').classList.toggle('on',v==='today');
+  $('#v-subject').classList.toggle('on',v==='subject');
+  document.querySelectorAll('.rail button').forEach(x=>x.classList.remove('on'));
+  const b=v==='today'
+    ? document.querySelector('.rail button[data-view="today"]')
+    : document.querySelector('.rail button[data-sub="'+curSub+'"]');
+  if(b)b.classList.add('on');
+  $('#hDate').textContent=`${TODAY.getMonth()+1}月${TODAY.getDate()}日 周${WD[TODAY.getDay()]}`;
+  if(v==='today'){
+    $('#hTitle').textContent='今日查看';
+    $('#hSub').textContent=`起步 ${fmtD(kd(START))} · 第 ${dayNo()} 天 ｜ 距考试 ${daysLeft()} 天`;
+  }else{
+    $('#hTitle').textContent=curSub;
+    $('#hSub').textContent=`${curStage()} ｜ 起步 ${fmtD(kd(START))} · 第 ${dayNo()} 天 ｜ 距考试 ${daysLeft()} 天`;
+  }
+}
+document.querySelectorAll('.rail button[data-view]').forEach(b=>{
+  b.onclick=()=>{showView('today');window.scrollTo({top:0,behavior:'smooth'});};
+});
+document.querySelectorAll('.rail button[data-sub]').forEach(b=>{
+  b.onclick=()=>{curSub=b.dataset.sub;showView('subject');renderSubject();window.scrollTo({top:0,behavior:'smooth'});};
+});
+
+/* ============ 当前科目内容 ============ */
+function renderSubject(){
+  const all=DAY[KD]||[];
+  const list=all.filter(u=>u.sub===curSub);
+  const stage=curStage();
+  $('#subjTitle').textContent=curSub;
+  $('#progTitle').textContent=curSub;
+  $('#soonHint').textContent=curSub+' · 未来 10 天内';
+
+  if(list.length){
+    const totalH=list.reduce((a,b)=>a+b.h,0);
+    $('#heroStage').textContent=stage;
+    $('#heroCountdown').textContent=`距考试 ${daysLeft()} 天`;
+    $('#heroMain').textContent=`${curSub}：${list[0].d}${list.length>1?' 等'+list.length+'项':''}`;
+    $('#heroSub').textContent=list.map(u=>u.u).filter(Boolean).slice(0,2).join('；')+' — '+[...new Set(list.map(u=>u.tag))].join(' / ');
+    $('#heroH').textContent=`建议 ${totalH}h`;
+  }else{
+    $('#heroStage').textContent='今日无排课';
+    $('#heroCountdown').textContent=`距考试 ${daysLeft()} 天`;
+    $('#heroMain').textContent=`${curSub}今天没排课，做错题回顾`;
+    $('#heroSub').textContent='复盘同样重要：把本周错题重做一遍，比多听一节新课有用。';
+    $('#heroH').textContent='建议 1.5h';
+  }
+  const dd=(done[KD]||[]).filter(x=>x.startsWith(curSub+'|')).length;
+  $('#heroProg').textContent=`今日完成 ${dd}/${Math.max(list.length,1)}`;
+  let wc=0;for(let i=0;i<7;i++){const d=new Date(TODAY);d.setDate(d.getDate()-i);if(checks.includes(kd(d)))wc++;}
+  $('#heroWeek').textContent=`本周打卡 ${wc}/7`;
+
+  const box=$('#todayList');
+  if(!list.length){
+    box.innerHTML='<div class="li" style="color:var(--ink3)">今天这一科没有安排，好好休息或做错题。</div>';
+  }else{
+    box.innerHTML='';
+    list.forEach(u=>{
+      const c=HEX[curSub];
+      const el=document.createElement('div');
+      el.className='subj'; el.style.borderLeftColor=c;
+      el.innerHTML=`
+        <div class="h"><span class="nm" style="background:${c}">${u.sub}</span><span class="rd">${u.tag||u.rname}</span></div>
+        <div class="ch">${u.d}</div>
+        <div class="un">${u.u||''}</div>
+        <div class="ft"><span>建议 ${u.h}h</span>${u.test?'<span style="color:#c2410c">· 阶段测</span>':''}${u.tag?'<span>· '+u.tag+'</span>':''}
+          <div class="ck ${isDone(u)?'on':''}">${isDone(u)?'✓':''}</div></div>`;
+      el.querySelector('.ck').onclick=()=>{
+        (done[KD]||=[]);
+        const k=uk(u), i=done[KD].indexOf(k);
+        if(i>=0)done[KD].splice(i,1); else {done[KD].push(k);toast('已标记完成 👍');}
+        save(); renderAll();
+      };
+      box.appendChild(el);
+    });
+  }
+
+  const ss=$('#subjStat'); ss.innerHTML='';
+  DATA.filter(r=>r.sub===curSub).forEach(r=>{
+    const n=r.units.length; if(!n)return;
+    const fin=r.units.filter(u=>isDone(u)).length;
+    const pct=Math.round(fin/n*100);
+    const el=document.createElement('div'); el.className='row';
+    el.innerHTML=`<div class="nm" style="width:118px">${r.name}</div>
+      <div class="bar"><i style="width:${pct}%;background:${HEX[curSub]}"></i></div>
+      <div class="pc">${pct}%</div>`;
+    ss.appendChild(el);
+  });
+
+  const tl=$('#soonList'); tl.innerHTML='';
+  let n=0;
+  for(let i=1;i<=10;i++){
+    const d=new Date(TODAY); d.setDate(d.getDate()+i);
+    const arr=(DAY[kd(d)]||[]).filter(u=>u.sub===curSub);
+    if(!arr.length)continue;
+    const el=document.createElement('div'); el.className='it';
+    el.innerHTML=`<div class="dt">${fmtD(kd(d))} 周${WD[d.getDay()]}</div>
+      <div class="tx">${arr.map(u=>u.d).join('；')}</div>`;
+    tl.appendChild(el); n++;
+  }
+  if(!n)tl.innerHTML='<div class="li" style="color:var(--ink3)">未来 10 天这一科没有排课。</div>';
+}
+
+/* ============ 打卡 + 三科完成度 ============ */
+function renderCheck(){
+  let s=0;for(let i=0;i<400;i++){const d=new Date(TODAY);d.setDate(d.getDate()-i);if(checks.includes(kd(d)))s++;else if(i>0)break;}
+  $('#streakTxt').textContent=s?`连续 ${s} 天`:'今天开始';
+  $('#startLine').textContent=`进度起点：${fmtD(kd(START))}（今天）· 第 ${dayNo()} 天 · 四轮计划从今天起算`;
+  const wb=$('#weekBar'); wb.innerHTML='';
+  const ws=weekStart(TODAY);
+  for(let i=0;i<7;i++){
+    const d=new Date(ws); d.setDate(d.getDate()+i);
+    const h=checks.includes(kd(d)), td=kd(d)===KD;
+    const el=document.createElement('div');
+    el.className='d1'+(h?' hit':'')+(td?' td':'');
+    el.innerHTML=`<b>${d.getDate()}</b>${WD[d.getDay()]}`;
+    wb.appendChild(el);
+  }
+  const as=$('#allStat'); as.innerHTML='';
+  SUBS.forEach(sub=>{
+    const us=DATA.filter(r=>r.sub===sub).flatMap(r=>r.units);
+    const fin=us.filter(u=>isDone(u)).length;
+    const pct=us.length?Math.round(fin/us.length*100):0;
+    const el=document.createElement('div'); el.className='row';
+    el.innerHTML=`<div class="nm" style="width:52px;color:${HEX[sub]};font-weight:700">${sub}</div>
+      <div class="bar"><i style="width:${pct}%;background:${HEX[sub]}"></i></div>
+      <div class="pc">${pct}%</div>`;
+    as.appendChild(el);
+  });
+}
+$('#btnCheck').onclick=()=>{
+  if(!checks.includes(KD)){checks.push(KD);toast('打卡成功，今天没白过 ✨');}
+  else toast('今天已经打过卡啦');
+  save(); renderAll();
+};
+
+/* ============ 每日提醒 ============ */
+function dayIndex(){
+  const diff=Math.round((TODAY-START)/864e5);
+  return ((diff%Q.length)+Q.length)%Q.length;
+}
+let qOffset=0;
+function renderRemind(){
+  const i=(dayIndex()+qOffset)%Q.length;
+  const dl=daysLeft();
+  if($('#cdNum')) $('#cdNum').textContent=dl>0?dl:0;
+  if($('#cdWrap')) $('#cdWrap').classList.toggle('tight',dl<=60);
+  if($('#cdText')) $('#cdText').innerHTML=dl>0?`距 2027 中级会计考试<br><span style="color:#C026D3;font-weight:700">${dl*3} 小时</span>可用来改变结果`:'考试已结束';
+  if($('#alarmQuote')) $('#alarmQuote').textContent=Q[i];
+  if($('#alarmDots')){
+    const dots=[];for(let k=-2;k<=2;k++){dots.push(`<i class="${k===0?'on':''}"></i>`);}
+    $('#alarmDots').innerHTML=dots.join('');
+  }
+  const sd=$('#sideDays'); if(sd) sd.innerHTML=dl+'<small>天</small>';
+  const arr=DAY[KD]||[];
+  const subs=[...new Set(arr.map(u=>u.sub))];
+  const doneN=(done[KD]||[]).length;
+  const extras=[];
+  if(dl>0) extras.push(`距考试还有 <b style="color:#7C3AED">${dl}</b> 天，今天就是其中一天。`);
+  if(subs.length) extras.push(`今天该学：<b style="color:#7C3AED">${subs.join(' / ')}</b>，别挑最简单的那门先做。`);
+  if(arr.length&&doneN===0) extras.push(`今天的 <b style="color:#DB2777">${arr.length}</b> 项还一项没勾，你打算几点开始？`);
+  if(arr.length&&doneN>0&&doneN<arr.length) extras.push(`已完成 ${doneN}/${arr.length}，剩下的别留到明天。`);
+  if(!arr.length) extras.push(`今天没排课，正好补上你欠下的那一章。`);
+  if($('#alarmSup')){
+    $('#alarmSup').innerHTML=extras.slice(0,2).join('<br>') || '今天没有借口。';
+  }
+  const m=String(TODAY.getMonth()+1);
+  const tips=MONTH_TIP[m]||[];
+  $('#monthTip').textContent=`${TODAY.getMonth()+1}月`;
+  $('#monthList').innerHTML=tips.map(t=>'· '+t).join('<br>');
+}
+
+$('#alarmNext') && ($('#alarmNext').onclick=()=>{qOffset++;renderRemind();});
+$('#alarmCopy') && ($('#alarmCopy').onclick=()=>{
+  const t='距2027中级会计考试还有'+daysLeft()+'天\n'+$('#alarmQuote').textContent;
+  navigator.clipboard?.writeText(t)?.then?.(()=>toast('已复制，去设成锁屏壁纸'),()=>toast('复制失败'));
+});
+
+/* ============ 多维度倒计时 ============ */
+function renderDims(){
+  const el=$('#dimsBar'); if(!el)return;
+  const dl=daysLeft();
+  let weekends=0; const t=new Date(TODAY);
+  while(t<EXAM){const w=t.getDay();if(w===0||w===6)weekends++;t.setDate(t.getDate()+1);}
+  el.innerHTML=`<span>距考试 <b>${dl}</b> 天</span><span><b>${dl*3}</b> 小时(按3h/天)</span><span>剩 <b>${weekends}</b> 个周末</span><span><b>${Math.floor(dl/7)}</b> 个完整周</span>`;
+}
+
+/* ============ 每日时长滑杆 ============ */
+function renderBudget(){
+  const r=$('#budgetRange'); if(!r)return;
+  r.value=budget;
+  $('#budgetVal').textContent=budget+'h';
+  const all=DAY[KD]||[];
+  const need=all.reduce((a,b)=>a+b.h,0);
+  $('#budgetHint').textContent=`今日排课 ${need.toFixed(1)}h · 计划 ${budget}h · ${need>budget?'排课超出，优先做实务':'可按计划完成'}`;
+  const hh=$('#heroH'); if(hh) hh.textContent=`建议 ${Math.min(budget,need||budget)}h`;
+}
+$('#budgetRange').oninput=e=>{budget=Number(e.target.value);save();renderBudget();};
+
+/* ============ 番茄时钟 ============ */
+let pomoMin=25, pomoLeft=25*60, pomoTimer=null, pomoRunning=false;
+function fmtPomo(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function renderPomo(){
+  const c=$('#pomoClock'); if(c) c.textContent=fmtPomo(pomoLeft);
+  const t=$('#pomoTotal'); if(t) t.textContent='累计完成 '+pomoCount+' 个';
+  const g=$('#pomoGo'); if(g) g.textContent=pomoRunning?'暂停':'开始专注';
+}
+document.querySelectorAll('.pomo .modes button').forEach(b=>{
+  b.onclick=()=>{
+    if(pomoRunning)return;
+    pomoMin=Number(b.dataset.min); pomoLeft=pomoMin*60;
+    document.querySelectorAll('.pomo .modes button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); renderPomo();
+  };
+});
+$('#pomoGo').onclick=()=>{
+  if(pomoRunning){clearInterval(pomoTimer);pomoRunning=false;}
+  else{
+    pomoRunning=true;
+    pomoTimer=setInterval(()=>{
+      pomoLeft--;
+      if(pomoLeft<=0){
+        clearInterval(pomoTimer);pomoRunning=false;pomoLeft=pomoMin*60;
+        pomoCount++;save();toast('番茄钟完成，起来活动一下');
+      }
+      renderPomo();
+    },1000);
+  }
+  renderPomo();
+};
+$('#pomoRst').onclick=()=>{clearInterval(pomoTimer);pomoRunning=false;pomoLeft=pomoMin*60;renderPomo();};
+
+/* ============ 学习热力图（近12周） ============ */
+function renderHeat(){
+  const g=$('#heatGrid'); if(!g)return; g.innerHTML='';
+  let total=0;
+  for(let i=83;i>=0;i--){
+    const d=new Date(TODAY); d.setDate(d.getDate()-i);
+    const h=checks.includes(kd(d)); if(h)total++;
+    const el=document.createElement('i');
+    if(h){
+      let run=0;
+      for(let j=0;j<7;j++){const x=new Date(d);x.setDate(x.getDate()-j);if(checks.includes(kd(x)))run++;else break;}
+      el.className=run>=7?'l4':run>=4?'l3':run>=2?'l2':'l1';
+    }
+    g.appendChild(el);
+  }
+  $('#heatHint').textContent=`近12周打卡 ${total} 天`;
+}
+
+/* ============ 成就徽章 ============ */
+function renderBadges(){
+  const box=$('#badgeBox'); if(!box)return;
+  let s=0;for(let i=0;i<400;i++){const d=new Date(TODAY);d.setDate(d.getDate()-i);if(checks.includes(kd(d)))s++;else if(i>0)break;}
+  const finAll=Object.values(done).reduce((a,arr)=>a+arr.length,0);
+  const wrongDone=wrong.filter(w=>w.stage>=1).length;
+  const subsDone=SUBS.filter(sub=>{
+    const us=DATA.filter(r=>r.sub===sub).flatMap(r=>r.units);
+    return us.some(u=>isDone(u));
+  }).length;
+  const badges=[
+    {ic:'3',n:'连续3天',on:s>=3},
+    {ic:'7',n:'连续7天',on:s>=7},
+    {ic:'30',n:'连续30天',on:s>=30},
+    {ic:'✓',n:'任务20项',on:finAll>=20},
+    {ic:'错',n:'错题复习10',on:wrongDone>=10},
+    {ic:'番',n:'番茄钟5个',on:pomoCount>=5},
+    {ic:'三',n:'三科齐开',on:subsDone>=3},
+  ];
+  box.innerHTML=badges.map(b=>`<div class="badge ${b.on?'on':''}"><span class="ic">${b.ic}</span>${b.n}</div>`).join('');
+  $('#badgeHint').textContent=`已点亮 ${badges.filter(b=>b.on).length}/${badges.length}`;
+}
+
+/* ============ 四轮进度总览 ============ */
+function renderRounds(){
+  const box=$('#roundStat'); if(!box)return;
+  const rounds=[['① 精讲一遍','r1'],['② 精讲二遍','r2'],['③ 强化','r3'],['④ 冲刺','r4']];
+  box.innerHTML=rounds.map(([name,pre])=>{
+    const rs=DATA.filter(r=>r.key.startsWith(pre));
+    const us=rs.flatMap(r=>r.units);
+    const fin=us.filter(u=>isDone(u)).length;
+    const pct=us.length?Math.round(fin/us.length*100):0;
+    const range=rs.length?`${fmtD(rs[0].start)} – ${fmtD(rs[rs.length-1].end)}`:'';
+    return `<div class="row"><div class="nm" style="width:96px">${name}</div><div class="bar"><i style="width:${pct}%;background:linear-gradient(90deg,#C4B5FD,#F9A8D4)"></i></div><div class="pc">${pct}%</div></div><div style="font-size:10px;color:var(--ink3);margin:-4px 0 8px 106px">${range} · ${fin}/${us.length}</div>`;
+  }).join('');
+}
+
+/* ============ 错题本（1/3/7 天复习） ============ */
+function renderWrong(){
+  const box=$('#wrongList'); if(!box)return;
+  $('#wrongHint').textContent=`共 ${wrong.length} 条`;
+  const due=wrong.filter(w=>w.next<=KD);
+  $('#reviewTip').textContent=due.length
+    ? `今天该复习 ${due.length} 条：${due.slice(0,2).map(w=>w.title).join('、')}`
+    : (wrong.length?'今天没有到期复习':'录入错题后按 1/3/7 天提醒复习');
+  if(!wrong.length){
+    box.innerHTML='<div class="li" style="color:var(--ink3)">还没有错题。做题错了随手记一条。</div>';
+    return;
+  }
+  box.innerHTML=wrong.slice().reverse().map(w=>{
+    const isDue=w.next<=KD;
+    return `<div class="wrong-item"><div>${w.title}</div><div class="meta">${w.sub} · ${w.reason||'未写错因'} · 下次复习 ${fmtD(w.next)}</div><div class="ops"><button class="${isDue?'':'done'}" data-act="review" data-id="${w.id}">${isDue?'标记已复习':'已复习'}</button><button data-act="del" data-id="${w.id}">删除</button></div></div>`;
+  }).join('');
+  box.querySelectorAll('button[data-act]').forEach(b=>{
+    b.onclick=()=>{
+      const w=wrong.find(x=>x.id===Number(b.dataset.id)); if(!w)return;
+      if(b.dataset.act==='del'){wrong=wrong.filter(x=>x.id!==w.id);}
+      else{
+        const iv=[1,3,7];
+        w.stage=Math.min((w.stage||0)+1,2);
+        const nd=new Date(TODAY); nd.setDate(nd.getDate()+iv[w.stage]);
+        w.next=kd(nd); w.last=KD;
+      }
+      save();renderWrong();renderBadges();
+    };
+  });
+}
+$('#wAdd').onclick=()=>{
+  const t=$('#wTitle').value.trim(); if(!t){toast('先写错题内容');return;}
+  const sub=$('#wSub').value, reason=$('#wReason').value.trim();
+  const nd=new Date(TODAY); nd.setDate(nd.getDate()+1);
+  wrong.push({id:Date.now(),title:t,sub,reason,created:KD,next:kd(nd),stage:0});
+  $('#wTitle').value='';$('#wReason').value='';
+  save();renderWrong();renderBadges();toast('已加入错题本，明天复习');
+};
+
+/* ============ 周复盘自动汇总 ============ */
+function renderWeekly(){
+  const ws=weekStart(TODAY);
+  const days=[];for(let i=0;i<7;i++){const d=new Date(ws);d.setDate(d.getDate()+i);days.push(kd(d));}
+  $('#weekRange').textContent=`${fmtD(days[0])}–${fmtD(days[6])}`;
+  const tasks=days.flatMap(k=>DAY[k]||[]);
+  let doneN=0, checkN=0, hours=0;
+  days.forEach(k=>{
+    const ds=done[k]||[];
+    doneN+=ds.length;
+    if(checks.includes(k))checkN++;
+    hours+=tasks.filter(u=>k===u.date&&ds.includes(uk(u))).reduce((a,u)=>a+u.h,0);
+  });
+  const rate=tasks.length?Math.round(doneN/tasks.length*100):0;
+  const box=$('#weekStat');
+  if(box) box.innerHTML=`<div><b>${rate}%</b><span>完成率</span></div><div><b>${hours.toFixed(1)}h</b><span>学习时长</span></div><div><b>${checkN}/7</b><span>打卡天数</span></div><div><b>${Math.max(tasks.length-doneN,0)}</b><span>欠账任务</span></div>`;
+  const lag=SUBS.filter(sub=>{
+    const t=tasks.filter(u=>u.sub===sub);
+    return t.length&&t.filter(u=>isDone(u)).length/t.length<0.5;
+  });
+  $('#weekSummary').innerHTML=`本周排课 ${tasks.length} 项，完成 ${doneN} 项${lag.length?`；<b style="color:#DB2777">${lag.join('、')} 完成率不足一半</b>，下周优先`:'；节奏正常，保持'}。`;
+}
+
+function renderAll(){
+  renderSubject(); renderCheck(); renderRemind(); renderDims(); renderBudget();
+  renderPomo(); renderHeat(); renderBadges(); renderRounds(); renderWrong(); renderWeekly();
+  showView(curView);
+}
+renderAll();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('./sw.js').catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
